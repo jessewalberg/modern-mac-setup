@@ -1,0 +1,14 @@
+# >>> modern-mac-setup >>>
+# Initialize Homebrew from its supported default prefix without assuming CPU
+# architecture. This supports native Apple silicon and native Intel shells.
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /usr/local/bin/brew ]]; then
+  eval "$(/usr/local/bin/brew shellenv)"
+fi
+
+# Activate project-pinned tools only after Homebrew is available.
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+# <<< modern-mac-setup <<<

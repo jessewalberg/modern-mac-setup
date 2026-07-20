@@ -1,0 +1,26 @@
+# Local application selections and machine-specific overlays
+Brewfile.apps
+Brewfile.local
+*.local
+
+# Secrets and credentials — never rely on this list as the only protection
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.mobileconfig
+secrets/
+private/
+
+# macOS and editor state
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs and local validation artifacts
+*.log
+markdownlint-cli2-results.*

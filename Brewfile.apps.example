@@ -1,0 +1,37 @@
+# Copy this file to Brewfile.apps, then uncomment only selected applications.
+# Install the reviewed file with:
+#   ./scripts/bootstrap.sh --apps Brewfile.apps
+#
+# Homebrew casks install vendor applications and have a different trust model
+# from Homebrew formulae. Review the vendor, license, permissions, and update
+# channel before uncommenting a line.
+
+# Password manager — choose one.
+# cask "1password"
+# cask "bitwarden"
+
+# Browser — Safari is already present; add another only when needed.
+# cask "firefox"
+
+# Editor — choose one or keep the editor already used by the team.
+# cask "visual-studio-code"
+# cask "zed"
+
+# Terminal — Terminal.app is sufficient for the bootstrap.
+# cask "ghostty"
+# cask "iterm2"
+
+# Containers — choose one platform after checking licensing and team needs.
+# cask "docker-desktop"
+# cask "orbstack"
+# cask "podman-desktop"
+
+# Window management / launcher — both require meaningful permissions.
+# cask "rectangle"
+# cask "raycast"
+
+# Dotfile management is useful once configuration grows.
+# brew "chezmoi"
+
+# Mac App Store automation is intentionally not enabled by default.
+# brew "mas"

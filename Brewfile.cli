@@ -1,0 +1,11 @@
+# Optional command-line quality-of-life tools.
+# Install with: ./scripts/bootstrap.sh --with-cli
+
+brew "bat"
+brew "fd"
+brew "fzf"
+brew "jq"
+brew "ripgrep"
+brew "shellcheck"
+brew "shfmt"
+brew "tree"

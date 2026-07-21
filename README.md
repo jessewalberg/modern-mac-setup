@@ -4,7 +4,7 @@
 
 A security-conscious, reproducible guide for setting up a new Mac without turning one person's preferences into universal defaults.
 
-**Last reviewed:** July 20, 2026<br>
+**Last reviewed:** July 21, 2026<br>
 **Target:** macOS Sonoma 14 or newer, with macOS Tahoe 26 as the current primary release<br>
 **Hardware:** Apple silicon first; native Intel execution is supported while Homebrew supports it
 
@@ -70,14 +70,35 @@ Install Homebrew, the minimal toolset, recommended command-line utilities, and t
   --configure-shell
 ```
 
-The default `Brewfile` installs only:
+The bootstrap installs [Homebrew](https://docs.brew.sh/) when requested, then uses it to install the small foundation below.
 
-- Git
-- GitHub CLI
-- `mise` for project-pinned non-Python runtimes and tools
-- `uv` for Python versions, projects, environments, and Python command-line tools
+### Foundation tools
 
-`Brewfile.cli` is optional and adds small, broadly useful utilities such as `jq`, `ripgrep`, `fd`, `fzf`, `bat`, ShellCheck, and `shfmt`.
+| Tool | Command | What it does | Example |
+| --- | --- | --- | --- |
+| [Git](https://git-scm.com/docs/git) | `git` | Tracks source history and exchanges commits with remote repositories. | `git status` |
+| [GitHub CLI](https://cli.github.com/manual/) | `gh` | Authenticates to GitHub and works with repositories, issues, pull requests, and releases from the terminal. | `gh auth login` |
+| [mise](https://mise.jdx.dev/) | `mise` | Installs and selects project-pinned versions of Node, Go, Java, Ruby, Terraform, and other tools. | `mise use node@22` |
+| [uv](https://docs.astral.sh/uv/) | `uv` | Manages Python versions, virtual environments, project dependencies, lockfiles, and Python command-line tools. | `uv sync` |
+
+These are managers and developer foundations, not a global installation of every language runtime. Runtime versions should normally be declared by each project.
+
+### Optional command-line utilities
+
+Passing `--with-cli` installs the tools in [`Brewfile.cli`](Brewfile.cli). They are conveniences rather than requirements; remove any that do not earn a place in your workflow.
+
+| Tool | Command | What it does | Example |
+| --- | --- | --- | --- |
+| [bat](https://github.com/sharkdp/bat#readme) | `bat` | Displays text files with syntax highlighting, line numbers, paging, and Git change markers. | `bat README.md` |
+| [fd](https://github.com/sharkdp/fd#readme) | `fd` | Finds files with simpler defaults than `find`, including automatic `.gitignore` handling. | `fd -e md` |
+| [fzf](https://github.com/junegunn/fzf#readme) | `fzf` | Interactively filters a list using fuzzy matching; useful for files, branches, history, and custom shell workflows. | `fd --type f \| fzf` |
+| [jq](https://jqlang.org/manual/) | `jq` | Reads, filters, transforms, and formats JSON on the command line. | `jq '.name' package.json` |
+| [ripgrep](https://github.com/BurntSushi/ripgrep#readme) | `rg` | Recursively searches text quickly while respecting `.gitignore` and skipping binary files by default. | `rg 'TODO' .` |
+| [ShellCheck](https://www.shellcheck.net/) | `shellcheck` | Statically analyzes shell scripts for common bugs, quoting errors, and portability problems. | `shellcheck scripts/*.sh` |
+| [shfmt](https://github.com/mvdan/sh#shfmt) | `shfmt` | Formats shell scripts consistently; this repository also uses it in CI. | `shfmt -d scripts/*.sh` |
+| [`tree`](https://formulae.brew.sh/formula/tree) | `tree` | Prints a directory hierarchy in a compact tree-shaped view. | `tree -L 2` |
+
+Homebrew package and executable names are not always the same. The notable example here is `ripgrep`: Homebrew installs the package named `ripgrep`, but the terminal command is `rg`.
 
 The bootstrap uses Homebrew's supported default prefix for the current architecture and fetches the official installer from an immutable, reviewed upstream commit. It refuses to run as root or from a Rosetta-translated terminal, does not use `sudo brew`, does not clean unrelated packages, and installs bundles with `--no-upgrade` to avoid upgrading unrelated software.
 
@@ -94,7 +115,19 @@ cat Brewfile.apps
 ./scripts/bootstrap.sh --apps Brewfile.apps
 ```
 
-The example groups alternatives so competing tools are not silently installed together. See [Applications and preferences](docs/05-apps-and-preferences.md).
+The example groups alternatives so competing tools are not silently installed together.
+
+| Category | Options | What they are for |
+| --- | --- | --- |
+| Password manager | [1Password](https://support.1password.com/), [Bitwarden](https://bitwarden.com/help/) | Store credentials, passkeys, secure notes, and recovery material outside this repository. Choose one. |
+| Browser | [Firefox](https://support.mozilla.org/products/firefox) | Adds a second browser for compatibility testing, profile separation, or personal preference. Safari is already installed. |
+| Editor | [Visual Studio Code](https://code.visualstudio.com/docs), [Zed](https://zed.dev/docs) | Edit code and integrate language tooling. Choose the editor that fits the projects and team. |
+| Terminal | [Ghostty](https://ghostty.org/docs), [iTerm2](https://iterm2.com/documentation.html) | Replace Terminal.app when their rendering, profiles, panes, or automation are genuinely useful. |
+| Containers | [Docker Desktop](https://docs.docker.com/desktop/setup/install/mac-install/), [OrbStack](https://docs.orbstack.dev/), [Podman Desktop](https://podman-desktop.io/docs/installation/macos-install) | Run Linux containers and related development environments. Check licensing, architecture support, and team compatibility before choosing one. |
+| Window management and launcher | [Rectangle](https://github.com/rxhanson/Rectangle#readme), [Raycast](https://manual.raycast.com/) | Add keyboard-driven window layouts or launcher automation; both may request meaningful macOS permissions. |
+| Configuration management | [chezmoi](https://www.chezmoi.io/user-guide/command-overview/), [`mas`](https://github.com/mas-cli/mas#readme) | Manage dotfiles across machines or install Mac App Store applications from the command line. Neither is enabled by default. |
+
+See [Applications and preferences](docs/05-apps-and-preferences.md) for the selection criteria and permission review process.
 
 ## Optional macOS preferences
 
@@ -130,7 +163,9 @@ Run the read-only audit at any time:
 
 The deep audit also checks the Brewfiles, GitHub CLI authentication, `mise doctor`, and `brew doctor`. Audit warnings are prompts for review; they are not evidence that a machine is compromised.
 
-## Guide map
+## Documentation index
+
+Every repository guide is linked here so the README remains the entry point.
 
 | Topic | Document |
 | --- | --- |
@@ -144,7 +179,10 @@ The deep audit also checks the Brewfiles, GitHub CLI authentication, `mise docto
 | Clean setup versus migration | [Migration](docs/migration.md) |
 | Why the repository is structured this way | [Design principles](docs/design-principles.md) |
 | Common failures and safe fixes | [Troubleshooting](docs/troubleshooting.md) |
-| Primary documentation used | [References](docs/references.md) |
+| Official platform and tool documentation | [References](docs/references.md) |
+| Contribution and acceptance rules | [Contributing](CONTRIBUTING.md) |
+| Reporting security-sensitive problems | [Security policy](SECURITY.md) |
+| Reuse terms | [MIT license](LICENSE) |
 
 ## What this repository will not do
 

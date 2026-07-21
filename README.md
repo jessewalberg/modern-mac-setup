@@ -9,6 +9,8 @@ A practical, security-conscious path from a new Mac to a small developer setup.
 
 This guide keeps the default install small. Applications, shell changes, and macOS preferences are opt-in.
 
+> **Built to stay current:** automated checks regularly test packages and workflows, and humans review the guide after major macOS releases. Recommendations should follow current official guidance rather than preserve old commands. See the [maintenance policy](MAINTENANCE.md).
+>
 > Maintainers and coding agents: start with [`AGENTS.md`](AGENTS.md). The README is intentionally for people setting up a Mac.
 
 ## 1. Secure the Mac first

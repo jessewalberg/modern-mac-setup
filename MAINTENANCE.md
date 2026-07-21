@@ -61,7 +61,7 @@ A green workflow is evidence that the tested installation path worked at that co
 
 1. Update the appropriate Brewfile.
 2. Update `config/packages.yml` with the token, type, group, expected command or app bundle, display name, and official documentation URL.
-3. Update the README or relevant guide with the recommendation and rationale.
+3. Update `docs/references.md` and the smallest relevant human guide; change the README only when the quick-start itself changes.
 4. Run `ruby scripts/validate-catalog.rb`.
 5. Run the existing lint and smoke tests.
 6. On macOS, run the relevant `brew bundle check` and installation path.

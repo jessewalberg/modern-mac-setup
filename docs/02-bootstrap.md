@@ -11,9 +11,11 @@ The script relies on:
 3. Homebrew's official package metadata, bottles, formulae, and casks;
 4. the upstream software represented by each selected package.
 
-Homebrew formulae and casks are not identical trust models. Formulae in `homebrew/core` are normally installed from Homebrew-built bottles with reviewed, checksummed metadata. Casks install vendor applications and often execute vendor installers. Third-party taps are executable code and are excluded from the default files.
+Homebrew formulae and casks are not identical trust models. Formulae in `homebrew/core` are normally installed from Homebrew-built bottles with reviewed, checksummed metadata. Casks install vendor applications and often execute vendor installers. Third-party taps are executable code and are excluded from the default and example install paths.
 
 Read Homebrew's [installation](https://docs.brew.sh/Installation), [supply-chain](https://docs.brew.sh/Supply-Chain-Security), and [tap trust](https://docs.brew.sh/Tap-Trust) documentation before adding non-official sources.
+
+A commented declaration is inert, but it is still a recommendation readers may copy. Example files therefore avoid disabled packages and non-official taps unless a nearby warning explains why the option is documentation-only.
 
 ## Why the script downloads before executing
 
@@ -57,29 +59,49 @@ xcode-select -p
 ./scripts/bootstrap.sh --install-homebrew
 ```
 
+The small baseline gives one owner to source control, GitHub operations, non-Python project runtimes, and Python projects. It does not install an editor, browser, terminal, container engine, database client, cloud CLI, or AI agent.
+
 ### Optional command-line utilities
 
-`Brewfile.cli` adds ergonomic and validation tools without changing the shell prompt, terminal, editor, or language versions.
+`Brewfile.cli` adds general ergonomic and validation tools without changing the shell prompt, terminal, editor, or language versions.
 
 ```bash
 ./scripts/bootstrap.sh --with-cli
 ```
 
-### Reviewed applications
+Read the tool descriptions in the README and remove anything that does not earn a place in the workflow.
 
-Graphical applications are supplied through a separate local file:
+### Reviewed graphical applications
+
+Graphical applications are supplied through a separate ignored local file:
 
 ```bash
 cp Brewfile.apps.example Brewfile.apps
 ${EDITOR:-nano} Brewfile.apps
-./scripts/bootstrap.sh --apps Brewfile.apps
+brew bundle check --file=Brewfile.apps --no-upgrade
+brew bundle install --file=Brewfile.apps --no-upgrade
 ```
 
-Keeping applications separate makes choices and conflicts visible. The bootstrap accepts any explicit Brewfile path, which also permits a private work-specific application list outside this public repository.
+`Brewfile.apps.example` is a broad commented menu, not a bundle to uncomment wholesale. Prefer the built-in macOS option first, then choose one or none per responsibility. Review the [tool catalog](tool-catalog.md) before enabling a cask.
+
+### Optional developer extras
+
+Formulae, AI agents, cloud tools, terminal editors, shell enhancements, and role-specific utilities use another ignored local overlay:
+
+```bash
+cp Brewfile.extras.example Brewfile.local
+${EDITOR:-nano} Brewfile.local
+brew bundle check --file=Brewfile.local --no-upgrade
+brew bundle install --file=Brewfile.local --no-upgrade
+```
+
+This layer is intentionally not a bootstrap flag. It is too broad and workflow-specific to imply a recommended combined installation. The [tool catalog](tool-catalog.md) explains use cases, overlap, permissions, data handling, and current package status.
+
+A separate private Brewfile may hold work-specific VPN, security, communication, licensed software, and organization tools. Keep credentials and activation material outside every Brewfile.
 
 ## Upgrade behavior
 
-The script performs `brew update` to refresh metadata, then invokes:
+The bootstrap performs `brew update` to refresh metadata, then invokes:
 
 ```bash
 brew bundle install --no-upgrade
@@ -87,11 +109,13 @@ brew bundle install --no-upgrade
 
 `--no-upgrade` reduces unexpected changes to software already present. It is not version pinning: Homebrew may still install current versions of missing packages or upgrade dependencies when necessary. Security and maintenance upgrades should be deliberate, recurring operations rather than side effects of adding one unrelated tool.
 
-Skip the metadata refresh only for a specific reason:
+Skip the explicit metadata refresh only for a specific reason:
 
 ```bash
 ./scripts/bootstrap.sh --no-update
 ```
+
+This flag skips the bootstrap's direct `brew update`; it should not be interpreted as a promise that every Homebrew operation is offline or unable to refresh metadata.
 
 ## Shell configuration
 
@@ -115,7 +139,7 @@ Preview the commands:
 
 A dry run cannot prove that network downloads, package conflicts, cask installers, or privacy prompts will succeed. It verifies the script's intended command sequence.
 
-## All options
+## All bootstrap options
 
 ```text
 --install-homebrew   permit Homebrew installation when brew is absent
@@ -123,8 +147,10 @@ A dry run cannot prove that network downloads, package conflicts, cask installer
 --apps FILE          install an explicitly reviewed application Brewfile
 --configure-shell    append the managed zsh block
 --apply-defaults     apply the narrow macOS preference script
---no-update          skip brew update
+--no-update          skip the bootstrap's explicit brew update
 --dry-run            print without changing the machine
 ```
+
+The `--apps FILE` option accepts any Brewfile syntax supported by Homebrew Bundle. Treat the file as executable package-manager input, not as a harmless list of names.
 
 Continue with [Git and GitHub](03-git-and-github.md).

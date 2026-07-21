@@ -65,7 +65,7 @@ jobs:
             gh issue edit "$issue_number" --body-file freshness-report.md
             gh issue comment "$issue_number" --body "Report refreshed by workflow run $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
           else
-            gh issue create --title "$title" --label maintenance --body-file freshness-report.md
+            gh issue create --title "$title" --body-file freshness-report.md
           fi
 
       - name: Upload report

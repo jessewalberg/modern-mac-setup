@@ -1,0 +1,87 @@
+name: Editorial review reminder
+
+on:
+  schedule:
+    - cron: "23 11 5 1,4,7,10 *"
+  workflow_dispatch:
+    inputs:
+      review_type:
+        description: Review type
+        required: false
+        default: quarterly
+        type: choice
+        options:
+          - quarterly
+          - major-macos-release
+          - annual-clean-machine
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  open-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Open editorial review issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REVIEW_TYPE: ${{ inputs.review_type || 'quarterly' }}
+        run: |
+          period="$(date -u '+%Y Q'$((($(date -u +%-m)-1)/3+1)))"
+          title="Editorial setup review: $period"
+          if gh issue list --state open --search "$title in:title" --json title --jq '.[].title' | grep -Fxq "$title"; then
+            echo "An open review issue already exists for $period."
+            exit 0
+          fi
+
+          cat > editorial-review.md <<EOF
+          # $REVIEW_TYPE review
+
+          Automated checks prove that declarations resolve and installations execute. This review decides whether the recommendations and instructions are still good.
+
+          ## Platform assumptions
+
+          - [ ] Confirm the supported macOS versions and Apple silicon/Intel policy.
+          - [ ] Review changes introduced by the latest macOS release and security updates.
+          - [ ] Confirm System Settings names, paths, screenshots, and privacy prompts.
+          - [ ] Verify Command Line Tools and Homebrew bootstrap instructions from official sources.
+
+          ## Packages and applications
+
+          - [ ] Review the monthly freshness issue and all unresolved tokens.
+          - [ ] Confirm every recommended app's vendor, ownership, license, update channel, and Apple silicon support.
+          - [ ] Review requested permissions, login items, extensions, and uninstall behavior.
+          - [ ] Look for safer, simpler, native, or open-source alternatives.
+          - [ ] Confirm competing applications are presented as choices rather than installed together.
+          - [ ] Remove recommendations that no longer earn their maintenance or security cost.
+
+          ## Guidance quality
+
+          - [ ] Walk every README path and documentation link.
+          - [ ] Confirm advice is sourced from primary documentation where practical.
+          - [ ] Check that manual steps remain manual when automation would require secrets or privileged permissions.
+          - [ ] Confirm examples, commands, expected outputs, and troubleshooting guidance.
+          - [ ] Update human-review dates only after completing the review.
+
+          ## Clean-machine acceptance test
+
+          Complete this section for an annual review, a major macOS release, or any material bootstrap change.
+
+          - [ ] Run the guide on a clean or disposable Mac.
+          - [ ] Test the minimal foundation and optional CLI bundle.
+          - [ ] Test one representative reviewed applications file.
+          - [ ] Apply and rerun macOS preference changes to check idempotency.
+          - [ ] Run the deep audit and document expected warnings.
+          - [ ] Test recovery, uninstall, and rerun behavior.
+
+          Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
+          EOF
+
+          gh issue create --title "$title" --body-file editorial-review.md

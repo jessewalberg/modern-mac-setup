@@ -10,7 +10,8 @@
 #
 # Read docs/tool-catalog.md before selecting tools. Prefer one owner per
 # responsibility and keep project versions in project configuration when
-# possible.
+# possible. Run brew info NAME again before install: minimum macOS versions,
+# architecture support, licensing, and package status can change.
 
 # Richer file and directory navigation.
 # brew "eza"       # Modern directory listings; keep basic ls knowledge.
@@ -58,11 +59,11 @@
 # Multi-agent orchestration — add only after a real parallel-work need exists.
 # brew "claude-squad"
 # cask "conductor"
-# cask "openusage" # Local usage overview; inspect what metadata it reads.
+# cask "openusage" # Usage overview; currently requires macOS 15 or newer.
 
 # Command-line container engines — choose one primary local container owner.
 # brew "colima" # Linux VM for container runtimes; pair with reviewed clients.
-# brew "podman" # OCI containers through a Podman machine on macOS.
+# brew "podman" # Podman machine; current formula supports Apple silicon macOS.
 
 # Kubernetes and infrastructure — normally project- or team-pinned.
 # brew "kubectl"
@@ -75,9 +76,9 @@
 # cask "gcloud-cli"
 
 # Networking and local services.
-# cask "ngrok"          # Public tunnels; understand authentication and exposure.
-# brew "mkcert"         # Locally trusted development certificates.
-# brew "wireguard-tools" # WireGuard command-line tools; configuration is operational state.
+# cask "ngrok"           # Public tunnels; understand authentication and exposure.
+# brew "mkcert"          # Locally trusted development certificates.
+# brew "wireguard-tools" # WireGuard CLI; configuration is operational state.
 
 # Media and document processing — project-specific rather than baseline.
 # brew "ffmpeg"

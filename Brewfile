@@ -1,12 +1,8 @@
-# Minimal developer foundation.
+# Minimal developer foundation installed after Apple's Command Line Tools.
 #
-# Keep this list small. Language runtimes and project tools belong in project
-# configuration, not in a machine-wide package list. The README includes usage
-# examples and links to each tool's documentation.
-
-# Git (command: git): distributed version control.
-# Docs: https://git-scm.com/docs/git
-brew "git"
+# Apple Git is the bootstrap/default Git. A newer Homebrew Git is an explicit
+# optional layer in Brewfile.git rather than a duplicate default dependency.
+# Language runtimes and project tools belong in project configuration.
 
 # GitHub CLI (command: gh): authenticate to and work with GitHub from a terminal.
 # Docs: https://cli.github.com/manual/

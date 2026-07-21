@@ -1,50 +1,82 @@
 # Troubleshooting
 
-Use the smallest corrective action that restores a supported state. Avoid broad permission changes, recursive ownership fixes, disabling security controls, or reinstalling everything before identifying the failing layer.
+Use the smallest corrective action that restores a supported state. Do not begin with recursive permission changes, disabled security controls, or a full reinstall.
 
-## Command Line Tools installer is pending
+## Command Line Tools are missing or unusable
 
-Symptom:
-
-```text
-xcode-select: error: unable to get active developer directory
-```
-
-Action:
+Install or request the tools:
 
 ```bash
 xcode-select --install
 ```
 
-Complete the graphical installer, open a new terminal, and verify:
+After the graphical installer finishes, open a new Terminal and verify functionality rather than only a path:
 
 ```bash
 xcode-select -p
+xcrun --find git
+git --version
+xcrun --find clang
+clang --version
 ```
 
-A full Xcode installation is not required for the basic Homebrew setup.
+When `xcode-select -p` succeeds but Git or clang fails, reinstall or reselect the Command Line Tools before running Homebrew. A full Xcode installation is not required for this setup.
+
+## The guide asks for Git before Homebrew
+
+That is intentional. Apple Command Line Tools provide the bootstrap/default Git. Homebrew Git is an optional later layer.
+
+Check ownership:
+
+```bash
+xcrun --find git
+command -v git
+git --version
+```
+
+The first path is Apple's selected Git. The second is the active shell Git and may change to Homebrew only after selecting `--with-homebrew-git`.
 
 ## `brew` exists but is not found
 
-Check supported paths:
+First determine the native architecture:
 
 ```bash
-ls -l /opt/homebrew/bin/brew /usr/local/bin/brew 2>/dev/null
+uname -m
 ```
 
-Load the matching environment for the current shell:
+Then inspect only the matching supported path:
 
 ```bash
 # Apple silicon
-eval "$(/opt/homebrew/bin/brew shellenv)"
+test -x /opt/homebrew/bin/brew && /opt/homebrew/bin/brew --prefix
 
 # Intel
-eval "$(/usr/local/bin/brew shellenv)"
+test -x /usr/local/bin/brew && /usr/local/bin/brew --prefix
 ```
 
-The managed shell snippet detects both supported paths automatically.
+Run the managed shell updater:
 
-Do not solve this by adding random Cellar directories to `PATH`.
+```bash
+./scripts/configure-shell.sh --dry-run
+./scripts/configure-shell.sh
+```
+
+Do not add random Cellar directories to `PATH`.
+
+## Bootstrap rejects the Homebrew in PATH
+
+This is a safety check, not a cosmetic warning. Inspect:
+
+```bash
+uname -m
+command -v brew
+brew --prefix
+ls -l /opt/homebrew/bin/brew /usr/local/bin/brew 2>/dev/null
+```
+
+For native Apple silicon, `brew --prefix` must be `/opt/homebrew`. For native Intel, it must be `/usr/local`.
+
+Remove stale PATH initialization from the current shell or dotfile source. Do not install another Homebrew until [Migration](migration.md) has established whether the existing prefix is legacy state or an intentional isolated requirement.
 
 ## Bootstrap reports Rosetta translation
 
@@ -55,51 +87,60 @@ sysctl -n sysctl.proc_translated 2>/dev/null
 uname -m
 ```
 
-Quit the translated terminal application. In Finder, inspect the terminal application's **Get Info** panel and clear **Open using Rosetta** when present, then relaunch.
+Quit the translated terminal application. In Finder, inspect **Get Info** and clear **Open using Rosetta** when present, then relaunch. Do not install Intel Homebrew merely to bypass the check.
 
-Do not install a second Intel Homebrew merely to get past the check.
+## Homebrew installer verification fails
+
+Stop. Do not execute the downloaded file manually.
+
+The failure means the content no longer matches the reviewed blob in `scripts/bootstrap.sh`, or the download was incomplete or altered. Check network interception, inspect the immutable upstream commit, and update the pin only through a reviewed repository change with CI and clean-machine validation.
 
 ## Homebrew permissions errors
 
-First confirm Homebrew is in a supported prefix and the bootstrap was not run with sudo:
+Confirm the architecture and prefix:
 
 ```bash
+uname -m
 brew --prefix
 brew doctor
 ```
 
-Do not run `sudo brew`, `chmod -R 777`, or recursively change ownership of `/usr/local` or `/opt/homebrew` without understanding every file in scope. Follow Homebrew's current diagnostic output and official troubleshooting documentation.
+Do not run `sudo brew`, `chmod -R 777`, or recursive ownership changes against `/usr/local` or `/opt/homebrew` without understanding every file in scope. Follow Homebrew's current diagnostic output and official documentation.
 
-## A cask fails or asks for permissions
+## The shell block will not update
 
-A cask may invoke a vendor installer, require a restart, conflict with another application, or need user-approved privacy access. Read:
+The updater refuses unsafe targets. Inspect:
+
+```bash
+ls -ld "${ZDOTDIR:-$HOME}/.zshrc"
+grep -n 'modern-mac-setup' "${ZDOTDIR:-$HOME}/.zshrc"
+```
+
+A symlink should be changed in its dotfiles source. Duplicate or incomplete markers require manual repair. The script makes no change until exactly zero or one complete managed block exists.
+
+## A cask fails or requests permissions
+
+Read package and vendor information:
 
 ```bash
 brew info --cask CASK_NAME
 ```
 
-Confirm the token on [Homebrew Formulae](https://formulae.brew.sh/) and the vendor's official documentation. Do not bypass Gatekeeper or quarantine to make an unverified download run.
+Confirm the token on [Homebrew Formulae](https://formulae.brew.sh/) and the vendor's official documentation. A cask may require a restart, conflict with another application, invoke a vendor installer, or need user-approved privacy access. Do not bypass Gatekeeper or quarantine for an unverified download.
 
 ## GitHub authentication fails
-
-Inspect:
 
 ```bash
 gh auth status --hostname github.com
 git remote -v
-```
-
-Reauthenticate through the browser flow:
-
-```bash
 gh auth login
 ```
 
-For SSH, test the documented endpoint and inspect `~/.ssh/config` for identity conflicts. Never place a token directly in the remote URL.
+For SSH, inspect `~/.ssh/config` for identity conflicts and test the documented GitHub endpoint. Never place a token directly in a remote URL.
 
 ## `mise` is installed but tools are unavailable
 
-Open a new terminal after installing the shell block, then run:
+Open a new Terminal after shell setup, then run:
 
 ```bash
 command -v mise
@@ -107,31 +148,29 @@ mise doctor
 mise current
 ```
 
-Inspect `.zshrc` for exactly one managed block. Multiple runtime managers may be changing `PATH`; remove overlapping activation only after identifying which projects still depend on it.
+Inspect `.zshrc` for exactly one managed block. Multiple runtime managers may be mutating `PATH`; remove overlap only after identifying the projects that still depend on it.
 
 ## `uv` tools are not on PATH
-
-Check:
 
 ```bash
 uv tool dir --bin
 uv tool list
 ```
 
-Use `uv tool update-shell` only after reviewing the change it proposes. A new terminal may be required. Project commands should generally run through `uv run` or `uvx` and do not need globally installed tool executables.
+Use `uv tool update-shell` only after reviewing its proposed change. Project commands should generally run through `uv run` or `uvx` and do not require globally visible executables.
 
-## Privacy permissions appear stuck
+## The audit exits nonzero
 
-Quit the application, review its permission category in System Settings, and reopen it. Some changes require a logout or restart. Avoid database-level TCC modifications and unsupported reset scripts unless following Apple or enterprise-management guidance for a known issue.
+The audit distinguishes warnings from errors:
 
-## The deep audit reports warnings
+- warnings require human context but do not fail the command;
+- errors block the selected phase and produce a nonzero exit status.
 
-Run each underlying command separately. Warnings may represent:
+Run the correct phase explicitly:
 
-- an optional bundle that was not selected;
-- a package manager caveat;
-- an unauthenticated CLI awaiting setup;
-- a deliberate local customization;
-- a real missing control.
+```bash
+./scripts/audit.sh --preflight
+./scripts/audit.sh --post-bootstrap --deep
+```
 
-Treat the audit as a structured conversation with the machine, not a pass/fail compliance certification.
+Preflight does not require Homebrew packages. Post-bootstrap does. Every checked executable is run and reported with its resolved path, so a failing tool should never appear as `[OK]`.

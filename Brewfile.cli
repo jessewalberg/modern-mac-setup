@@ -1,9 +1,8 @@
 # Optional command-line quality-of-life tools.
 # Install with: ./scripts/bootstrap.sh --with-cli
 #
-# Package and executable names can differ. For example, Homebrew installs the
-# "ripgrep" package, but the command you run is "rg". The README contains
-# examples and a comparison table.
+# Project validation tools (Node.js, Ruby, ShellCheck, and shfmt) are pinned in
+# mise.toml instead of becoming machine-wide Homebrew defaults.
 
 # bat (command: bat): display files with syntax highlighting and Git context.
 # Docs: https://github.com/sharkdp/bat#readme
@@ -24,14 +23,6 @@ brew "jq"
 # ripgrep (command: rg): recursively search text while respecting .gitignore.
 # Docs: https://github.com/BurntSushi/ripgrep#readme
 brew "ripgrep"
-
-# ShellCheck (command: shellcheck): find common shell bugs and portability issues.
-# Docs: https://www.shellcheck.net/
-brew "shellcheck"
-
-# shfmt (command: shfmt): format shell scripts consistently.
-# Docs: https://github.com/mvdan/sh#shfmt
-brew "shfmt"
 
 # tree (command: tree): display a directory hierarchy as a tree.
 # Docs: https://formulae.brew.sh/formula/tree

@@ -2,6 +2,8 @@
 Brewfile.apps
 Brewfile.local
 *.local
+mise.local.toml
+.mise.local.toml
 
 # Secrets and credentials — never rely on this list as the only protection
 .env
@@ -24,3 +26,5 @@ private/
 # Logs and local validation artifacts
 *.log
 markdownlint-cli2-results.*
+freshness-report.md
+editorial-review.md

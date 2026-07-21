@@ -4,122 +4,143 @@
 [![Maintenance validation](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/validate-maintenance.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/validate-maintenance.yml)
 [![Package freshness](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/freshness.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/freshness.yml)
 
-A security-conscious, reproducible guide for setting up a new Mac without turning one person's preferences into universal defaults.
+A security-conscious, reproducible guide for preparing a new Mac without turning one person's preferences into universal defaults.
 
 **Last human review:** July 21, 2026<br>
 **Automated validation:** every relevant pull request and every Monday<br>
 **Upstream freshness review:** monthly<br>
-**Editorial review:** quarterly, after major macOS releases, and annually on a clean Mac<br>
+**Editorial review:** quarterly, after major macOS releases, and annually on a clean or disposable Mac<br>
 **Target:** macOS Sonoma 14 or newer, with macOS Tahoe 26 as the current primary release<br>
-**Hardware:** Apple silicon first; native Intel execution is supported while Homebrew supports it
+**Hardware:** Apple silicon first; native Intel execution is tested while Homebrew supports it
 
-## Continuously maintained
+## What this repository optimizes for
 
-This is not intended to become a setup guide that slowly goes stale. The repository continuously checks that its Homebrew formulae and casks still resolve, that the foundation and CLI bundles install on a clean macOS runner, that documented command names exist, and that package metadata remains consistent with the Brewfiles and README.
+The setup follows six rules:
 
-Every month, automation creates or refreshes a public package-freshness issue. Every quarter, it opens a human editorial-review checklist covering macOS changes, permissions, licensing, ownership, alternatives, and outdated advice that could still pass technically. GitHub Actions dependencies are reviewed weekly through Dependabot, and the complete guide is exercised on a clean or disposable Mac at least annually and after material platform changes.
-
-A green badge means the tested path worked at that commit. It is not a security certification and does not mean every optional application is right for every user. See [Continuous maintenance policy](MAINTENANCE.md) for the exact guarantees, cadence, and public evidence.
-
-This repository starts from first principles:
-
-- Protect data and establish recovery paths before installing developer tools.
-- Automate deterministic package installation, not account sign-in, privacy grants, or taste.
-- Keep the default install small. Apps, shell changes, and macOS preferences are separate opt-ins.
-- Keep language versions inside projects rather than installing one global version of everything.
-- Never store tokens, private keys, recovery codes, or machine-specific secrets in this public repository.
-- Prefer commands that are inspectable, repeatable, architecture-aware, and safe to rerun.
+1. Protect data and establish recovery paths before installing developer tools.
+2. Keep the default package set small and assign one owner to each responsibility.
+3. Use Apple's Command Line Tools for the bootstrap Git and compiler.
+4. Use only the Homebrew prefix supported by the current native architecture.
+5. Automate deterministic package installation, not sign-in, privacy grants, credentials, or taste.
+6. Make every state-changing script inspectable, rerunnable, and bounded by explicit options.
 
 It is deliberately **not** a giant “run this and replace your whole Mac” script.
 
+## Supported ownership model
+
+| Responsibility | Owner | Default? |
+| --- | --- | --- |
+| Bootstrap Git and clang | Apple Command Line Tools | Required before cloning |
+| Package installation | Native Homebrew | Installed explicitly |
+| GitHub operations | [GitHub CLI](https://cli.github.com/manual/) | Foundation |
+| Non-Python project tools | [mise](https://mise.jdx.dev/) | Foundation |
+| Python projects and tools | [uv](https://docs.astral.sh/uv/) | Foundation |
+| Newer standalone Git | [Homebrew Git](https://git-scm.com/docs/git) | Optional |
+| Personal applications and preferences | User-selected layers | Optional |
+
+Apple's Git is not a temporary accident: it is the documented bootstrap and default Git. `Brewfile.git` exists only for a project or feature that requires a newer independently managed Git.
+
 ## Start here
 
-A new Mac should be prepared in this order:
+### 1. Establish the manual security and recovery baseline
 
-1. Complete Setup Assistant and decide whether the machine is clean or migrated.
-2. Install all available macOS security updates.
-3. Configure FileVault, recovery, automatic security updates, the firewall, and a real backup.
-4. Install Apple's Command Line Tools.
-5. Clone this repository and run the read-only audit.
-6. Bootstrap the small developer foundation.
-7. Configure GitHub authentication and project-specific runtimes.
-8. Add applications only after reviewing their permissions, update model, and license.
+Complete Setup Assistant, install all available macOS security updates, configure FileVault and recovery, enable the firewall where appropriate, and create a tested backup.
 
-The first three steps remain manual by design. Start with:
+Read these before automation:
 
 - [Before you start](docs/00-before-you-start.md)
 - [Security and backups](docs/01-security-and-backups.md)
+- [Migration](docs/migration.md), when moving from another Mac
 
-Then install the Command Line Tools:
+### 2. Install and verify Apple's Command Line Tools
 
 ```bash
 xcode-select --install
 ```
 
-After the installer completes:
+After the graphical installer finishes, open a new Terminal window and verify that the selected tools actually run:
+
+```bash
+xcode-select -p
+xcrun --find git
+git --version
+xcrun --find clang
+clang --version
+```
+
+These tools provide the Git used in the next step. Homebrew is not required to clone this repository.
+
+### 3. Clone and run the preflight audit
 
 ```bash
 git clone https://github.com/jessewalberg/modern-mac-setup.git
 cd modern-mac-setup
-./scripts/audit.sh
+./scripts/audit.sh --preflight
 ```
 
-## Bootstrap the developer foundation
+Preflight treats missing Homebrew packages as expected. It blocks only conditions that make the bootstrap unsafe or unusable, such as translated execution, broken Apple developer tools, an unsupported macOS version, or a wrong-architecture Homebrew installation.
 
-Review the files first:
+### 4. Review and bootstrap the foundation
 
 ```bash
 less scripts/bootstrap.sh
 cat Brewfile
-cat Brewfile.cli
-```
+cat snippets/zshrc
 
-Install Homebrew, the minimal toolset, recommended command-line utilities, and the managed shell snippet:
-
-```bash
 ./scripts/bootstrap.sh \
   --install-homebrew \
-  --with-cli \
   --configure-shell
 ```
 
-The bootstrap installs [Homebrew](https://docs.brew.sh/) when requested, then uses it to install the small foundation below.
+The script:
 
-### Foundation tools
+- refuses root and Rosetta-translated execution;
+- requires working Apple Git and clang, not merely an `xcode-select` path;
+- selects `/opt/homebrew` on Apple silicon or `/usr/local` on Intel;
+- rejects a different Homebrew prefix earlier in `PATH`;
+- downloads the official Homebrew installer from an immutable reviewed commit;
+- verifies the downloaded Git blob before execution;
+- installs only GitHub CLI, `mise`, and `uv` by default;
+- adds or updates one versioned shell block after backing up an existing `.zshrc`.
 
-| Tool | Command | What it does | Example |
-| --- | --- | --- | --- |
-| [Git](https://git-scm.com/docs/git) | `git` | Tracks source history and exchanges commits with remote repositories. | `git status` |
-| [GitHub CLI](https://cli.github.com/manual/) | `gh` | Authenticates to GitHub and works with repositories, issues, pull requests, and releases from the terminal. | `gh auth login` |
-| [mise](https://mise.jdx.dev/) | `mise` | Installs and selects project-pinned versions of Node, Go, Java, Ruby, Terraform, and other tools. | `mise use node@22` |
-| [uv](https://docs.astral.sh/uv/) | `uv` | Manages Python versions, virtual environments, project dependencies, lockfiles, and Python command-line tools. | `uv sync` |
+Open a new Terminal window after shell configuration, return to the repository, and verify:
 
-These are managers and developer foundations, not a global installation of every language runtime. Runtime versions should normally be declared by each project.
+```bash
+./scripts/audit.sh --post-bootstrap --deep
+```
 
-### Optional command-line utilities
+## Optional layers
 
-Passing `--with-cli` installs the tools in [`Brewfile.cli`](Brewfile.cli). They are conveniences rather than requirements; remove any that do not earn a place in your workflow.
+Install command-line conveniences only after the foundation works:
 
-| Tool | Command | What it does | Example |
-| --- | --- | --- | --- |
-| [bat](https://github.com/sharkdp/bat#readme) | `bat` | Displays text files with syntax highlighting, line numbers, paging, and Git change markers. | `bat README.md` |
-| [fd](https://github.com/sharkdp/fd#readme) | `fd` | Finds files with simpler defaults than `find`, including automatic `.gitignore` handling. | `fd -e md` |
-| [fzf](https://github.com/junegunn/fzf#readme) | `fzf` | Interactively filters a list using fuzzy matching; useful for files, branches, history, and custom shell workflows. | `fd --type f \| fzf` |
-| [jq](https://jqlang.org/manual/) | `jq` | Reads, filters, transforms, and formats JSON on the command line. | `jq '.name' package.json` |
-| [ripgrep](https://github.com/BurntSushi/ripgrep#readme) | `rg` | Recursively searches text quickly while respecting `.gitignore` and skipping binary files by default. | `rg 'TODO' .` |
-| [ShellCheck](https://www.shellcheck.net/) | `shellcheck` | Statically analyzes shell scripts for common bugs, quoting errors, and portability problems. | `shellcheck scripts/*.sh` |
-| [shfmt](https://github.com/mvdan/sh#shfmt) | `shfmt` | Formats shell scripts consistently; this repository also uses it in CI. | `shfmt -d scripts/*.sh` |
-| [`tree`](https://formulae.brew.sh/formula/tree) | `tree` | Prints a directory hierarchy in a compact tree-shaped view. | `tree -L 2` |
+```bash
+./scripts/bootstrap.sh --with-cli
+```
 
-Homebrew package and executable names are not always the same. The notable example here is `ripgrep`: Homebrew installs the package named `ripgrep`, but the terminal command is `rg`.
+The optional CLI layer contains:
 
-The bootstrap uses Homebrew's supported default prefix for the current architecture and fetches the official installer from an immutable, reviewed upstream commit. It refuses to run as root or from a Rosetta-translated terminal, does not use `sudo brew`, does not clean unrelated packages, and installs bundles with `--no-upgrade` to avoid upgrading unrelated software.
+| Tool | Command | Purpose |
+| --- | --- | --- |
+| [bat](https://github.com/sharkdp/bat#readme) | `bat` | Syntax-aware file viewing |
+| [fd](https://github.com/sharkdp/fd#readme) | `fd` | Ergonomic file search |
+| [fzf](https://github.com/junegunn/fzf#readme) | `fzf` | Interactive fuzzy filtering |
+| [jq](https://jqlang.org/manual/) | `jq` | JSON querying and transformation |
+| [ripgrep](https://github.com/BurntSushi/ripgrep#readme) | `rg` | Fast recursive text search |
+| [`tree`](https://formulae.brew.sh/formula/tree) | `tree` | Directory hierarchy display |
 
-See [Bootstrap and package management](docs/02-bootstrap.md) for every flag and trust boundary.
+Install Homebrew Git only for a documented requirement:
 
-## Add applications deliberately
+```bash
+./scripts/bootstrap.sh --with-homebrew-git
+command -v git
+git --version
+```
 
-No graphical applications are installed by default. Copy the example, uncomment only the applications chosen for this Mac, and inspect the result:
+The audit reports whether active Git comes from Apple, the native Homebrew prefix, or a custom path.
+
+## Applications are deliberate choices
+
+No graphical applications are installed by default. Copy the reviewed example, uncomment only the selected tools, and inspect the result:
 
 ```bash
 cp Brewfile.apps.example Brewfile.apps
@@ -128,108 +149,87 @@ cat Brewfile.apps
 ./scripts/bootstrap.sh --apps Brewfile.apps
 ```
 
-The example groups alternatives so competing tools are not silently installed together.
+| Category | Reviewed options |
+| --- | --- |
+| Password manager | [1Password](https://support.1password.com/), [Bitwarden](https://bitwarden.com/help/) |
+| Browser | [Firefox](https://support.mozilla.org/products/firefox) |
+| Editor | [Visual Studio Code](https://code.visualstudio.com/docs), [Zed](https://zed.dev/docs) |
+| Terminal | [Ghostty](https://ghostty.org/docs), [iTerm2](https://iterm2.com/documentation.html) |
+| Containers | [Docker Desktop](https://docs.docker.com/desktop/setup/install/mac-install/), [OrbStack](https://docs.orbstack.dev/), [Podman Desktop](https://podman-desktop.io/docs/installation/macos-install) |
+| Window management and launcher | [Rectangle](https://github.com/rxhanson/Rectangle#readme), [Raycast](https://manual.raycast.com/) |
+| Configuration management | [chezmoi](https://www.chezmoi.io/user-guide/command-overview/), [`mas`](https://github.com/mas-cli/mas#readme) |
 
-| Category | Options | What they are for |
-| --- | --- | --- |
-| Password manager | [1Password](https://support.1password.com/), [Bitwarden](https://bitwarden.com/help/) | Store credentials, passkeys, secure notes, and recovery material outside this repository. Choose one. |
-| Browser | [Firefox](https://support.mozilla.org/products/firefox) | Adds a second browser for compatibility testing, profile separation, or personal preference. Safari is already installed. |
-| Editor | [Visual Studio Code](https://code.visualstudio.com/docs), [Zed](https://zed.dev/docs) | Edit code and integrate language tooling. Choose the editor that fits the projects and team. |
-| Terminal | [Ghostty](https://ghostty.org/docs), [iTerm2](https://iterm2.com/documentation.html) | Replace Terminal.app when their rendering, profiles, panes, or automation are genuinely useful. |
-| Containers | [Docker Desktop](https://docs.docker.com/desktop/setup/install/mac-install/), [OrbStack](https://docs.orbstack.dev/), [Podman Desktop](https://podman-desktop.io/docs/installation/macos-install) | Run Linux containers and related development environments. Check licensing, architecture support, and team compatibility before choosing one. |
-| Window management and launcher | [Rectangle](https://github.com/rxhanson/Rectangle#readme), [Raycast](https://manual.raycast.com/) | Add keyboard-driven window layouts or launcher automation; both may request meaningful macOS permissions. |
-| Configuration management | [chezmoi](https://www.chezmoi.io/user-guide/command-overview/), [`mas`](https://github.com/mas-cli/mas#readme) | Manage dotfiles across machines or install Mac App Store applications from the command line. Neither is enabled by default. |
+A listing is not an endorsement for every machine. Review vendor ownership, licensing, requested permissions, update behavior, architecture support, data handling, and removal before selecting an application.
 
-See [Applications and preferences](docs/05-apps-and-preferences.md) for the selection criteria and permission review process.
+## Repository development environment
+
+The Mac foundation does not globally install this repository's test stack. Contributors use the pinned tools in [`mise.toml`](mise.toml): Node.js, Ruby, ShellCheck, and `shfmt`.
+
+```bash
+mise install
+mise run lint
+```
+
+This separation keeps production setup requirements distinct from repository-maintenance requirements.
 
 ## Optional macOS preferences
 
-The preferences script changes only four narrow, documented settings:
-
-- show filename extensions;
-- show Finder's path bar;
-- show Finder's status bar;
-- save screenshots in `~/Pictures/Screenshots`.
-
-Preview commands without changing anything:
+Preview four narrow changes without writing anything:
 
 ```bash
 ./scripts/macos-defaults.sh
 ```
 
-Apply them explicitly:
+Apply them only after review:
 
 ```bash
 ./scripts/macos-defaults.sh --apply
 ```
 
-The script records the previous values before applying changes. It never disables Gatekeeper, System Integrity Protection, quarantine, the firewall, automatic updates, or other security controls.
+The script records previous values, then shows filename extensions, enables Finder's path and status bars, and places screenshots in `~/Pictures/Screenshots`. It does not disable Gatekeeper, System Integrity Protection, quarantine, the firewall, or automatic security updates.
 
-## Verify the result
+## Continuous maintenance and evidence
 
-Run the read-only audit at any time:
+The repository distinguishes three kinds of evidence:
 
-```bash
-./scripts/audit.sh
-./scripts/audit.sh --deep
-```
+- **static and mocked validation** on Linux;
+- **pre-provisioned hosted macOS package tests** on Apple-silicon and Intel runners;
+- **clean-machine acceptance tests** performed manually on a clean or disposable Mac after material platform changes and at least annually.
 
-The deep audit also checks the Brewfiles, GitHub CLI authentication, `mise doctor`, and `brew doctor`. Audit warnings are prompts for review; they are not evidence that a machine is compromised.
+A green workflow proves only that the tested path worked at that commit. It is not a security certification and does not make every optional application appropriate. See [Maintenance policy](MAINTENANCE.md) and [Clean-machine acceptance test](docs/acceptance-test.md).
 
 ## Documentation index
 
-Every repository guide is linked here so the README remains the entry point.
-
 | Topic | Document |
 | --- | --- |
-| Continuous automated and human maintenance | [Maintenance policy](MAINTENANCE.md) |
 | Decisions before touching the machine | [Before you start](docs/00-before-you-start.md) |
 | FileVault, updates, firewall, permissions, and backup | [Security and backups](docs/01-security-and-backups.md) |
-| Homebrew, bundles, bootstrap flags, and shell setup | [Bootstrap](docs/02-bootstrap.md) |
-| Identity, authentication, SSH, and commit signing | [Git and GitHub](docs/03-git-and-github.md) |
+| Homebrew, architecture, trust pins, and flags | [Bootstrap](docs/02-bootstrap.md) |
+| Git ownership, identity, authentication, and signing | [Git and GitHub](docs/03-git-and-github.md) |
 | Python with `uv`; other runtimes with `mise` | [Runtimes](docs/04-runtimes.md) |
 | Choosing apps and applying narrow preferences | [Apps and preferences](docs/05-apps-and-preferences.md) |
-| Updates, drift review, and recurring checks | [Maintenance](docs/06-maintenance.md) |
-| Clean setup versus migration | [Migration](docs/migration.md) |
-| Why the repository is structured this way | [Design principles](docs/design-principles.md) |
-| Common failures and safe fixes | [Troubleshooting](docs/troubleshooting.md) |
-| Official platform and tool documentation | [References](docs/references.md) |
-| Contribution and acceptance rules | [Contributing](CONTRIBUTING.md) |
-| Reporting security-sensitive problems | [Security policy](SECURITY.md) |
-| Reuse terms | [MIT license](LICENSE) |
+| Updates, drift, and recurring checks | [Maintenance](docs/06-maintenance.md) |
+| Clean versus migrated setup | [Migration](docs/migration.md) |
+| Architecture and design rationale | [Design principles](docs/design-principles.md) |
+| Common failures and safe corrections | [Troubleshooting](docs/troubleshooting.md) |
+| End-to-end release evidence | [Acceptance test](docs/acceptance-test.md) |
+| Primary platform and tool documentation | [References](docs/references.md) |
+| Automated and human review commitments | [Maintenance policy](MAINTENANCE.md) |
+| Contribution rules | [Contributing](CONTRIBUTING.md) |
+| Vulnerability reporting | [Security policy](SECURITY.md) |
 
 ## What this repository will not do
 
 It will not:
 
 - disable SIP, Gatekeeper, app quarantine, FileVault, or automatic security updates;
-- install Homebrew into a nonstandard prefix;
-- run Homebrew as root;
-- install Rosetta automatically or mix native and translated Homebrew installations;
-- generate, copy, upload, or commit SSH private keys;
-- write Git identity, email addresses, tokens, or cloud credentials;
+- run Homebrew as root or install it into a nonstandard prefix;
+- silently use an Intel Homebrew from a native Apple-silicon process, or vice versa;
+- generate, copy, upload, or commit private keys, tokens, recovery codes, or identity data;
 - grant Accessibility, Full Disk Access, Screen Recording, or other privacy permissions;
-- globally install Python packages with `sudo pip`, or globally install every language runtime;
+- install competing applications, container platforms, shell frameworks, or language runtimes by default;
 - remove software merely because it is absent from a Brewfile;
-- promise bit-for-bit reproducibility from Homebrew, which is a rolling package manager rather than a lockfile system.
-
-## Updating the setup
-
-Change one layer at a time:
-
-1. Add or remove package declarations in a Brewfile.
-2. Update `config/packages.yml` and the relevant documentation.
-3. Run `ruby scripts/validate-catalog.rb`.
-4. Review the diff.
-5. Run `brew bundle check --no-upgrade`.
-6. Apply with `brew bundle install --no-upgrade`.
-7. Commit the rationale, not only the package name.
-
-Project runtime versions belong in each project's `mise.toml`, `.tool-versions`, `.python-version`, or equivalent lock/configuration files. The new-Mac repository should not become a hidden source of project requirements.
-
-## Contributing and security
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the acceptance rules. Security-sensitive reports should follow [SECURITY.md](SECURITY.md). Never paste credentials, private keys, recovery keys, serial numbers, or unredacted diagnostic archives into an issue.
+- promise bit-for-bit reproducibility from Homebrew, which is a rolling package manager.
 
 ## License
 

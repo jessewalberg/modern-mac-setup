@@ -4,10 +4,15 @@ on:
   pull_request:
     paths:
       - "Brewfile*"
+      - "Makefile"
       - "README.md"
+      - "MAINTENANCE.md"
+      - "mise.toml"
       - "config/**"
       - "docs/**"
       - "scripts/**"
+      - "snippets/**"
+      - "tests/**"
       - ".github/workflows/validate-maintenance.yml"
   push:
     branches:
@@ -23,47 +28,65 @@ jobs:
   catalog:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
+
+      - name: Install pinned Ruby
+        uses: jdx/mise-action@dad1bfd3df957f44999b559dd69dc1671cb4e9ea # v4
+        with:
+          cache: true
+          install_args: ruby
 
       - name: Validate package catalog
         run: ruby scripts/validate-catalog.rb
 
-  macos-install:
-    runs-on: macos-15
-    timeout-minutes: 35
+  hosted-macos-packages:
+    name: Hosted macOS packages (${{ matrix.architecture }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-26
+            architecture: arm64
+            prefix: /opt/homebrew
+          - runner: macos-26-intel
+            architecture: x86_64
+            prefix: /usr/local
+
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 45
+
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           persist-credentials: false
 
-      - name: Update Homebrew metadata
+      # Do not use mise-action here: it would add a second `mise` executable to
+      # PATH and weaken verification of the Homebrew-installed foundation.
+      - name: Confirm hosted runner architecture and Homebrew prefix
+        env:
+          EXPECTED_ARCHITECTURE: ${{ matrix.architecture }}
+          EXPECTED_PREFIX: ${{ matrix.prefix }}
+        run: |
+          test "$(uname -m)" = "$EXPECTED_ARCHITECTURE"
+          test "$(brew --prefix)" = "$EXPECTED_PREFIX"
+
+      - name: Refresh Homebrew metadata
         run: brew update
 
+      - name: Run the real package bootstrap against pre-provisioned Homebrew
+        run: ./scripts/bootstrap.sh --no-update --with-cli
+
       - name: Validate package catalog
         run: ruby scripts/validate-catalog.rb
 
-      - name: Verify package declarations resolve
-        run: |
-          ruby -ryaml -e '
-            packages = YAML.safe_load(File.read("config/packages.yml"), permitted_classes: [], aliases: false).fetch("packages")
-            packages.each do |package|
-              args = package.fetch("type") == "cask" ? ["brew", "info", "--cask", package.fetch("token")] : ["brew", "info", "--formula", package.fetch("token")]
-              abort("Unable to resolve #{package.fetch("type")} #{package.fetch("token")}") unless system(*args, out: File::NULL)
-            end
-          '
-
-      - name: Install foundation and CLI bundles
-        run: |
-          brew bundle install --file=Brewfile --no-upgrade
-          brew bundle install --file=Brewfile.cli --no-upgrade
-
-      - name: Verify expected commands
+      - name: Verify installed commands execute
         run: ruby scripts/verify-installed.rb foundation cli
 
-      - name: Run deep audit
-        run: ./scripts/audit.sh --deep
+      - name: Run post-bootstrap audit
+        run: ./scripts/audit.sh --post-bootstrap --deep

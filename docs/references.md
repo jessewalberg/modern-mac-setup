@@ -1,25 +1,26 @@
 # Primary References
 
-These sources informed the repository's current behavior. They are intentionally dominated by platform and tool owners rather than copied setup recipes.
+These sources inform the repository's current behavior. Platform-sensitive instructions should prefer owner documentation over copied setup recipes.
 
 **Reviewed:** July 21, 2026
 
 ## Apple
 
 - [Apple security releases](https://support.apple.com/en-us/100100)
-- [Volume encryption with FileVault in macOS](https://support.apple.com/guide/security/volume-encryption-with-filevault-sec4c6dc1b6e/web)
-- [Protect data on your Mac with FileVault](https://support.apple.com/guide/mac-help/protect-data-on-your-mac-with-filevault-mh11785/mac)
-- [Automatically install Background Security Improvements](https://support.apple.com/guide/mac-help/install-background-security-improvements-mchl44c4c70c/mac)
-- [Block connections with the macOS firewall](https://support.apple.com/guide/mac-help/block-connections-to-your-mac-with-a-firewall-mh34041/mac)
-- [Back up your Mac with Time Machine](https://support.apple.com/en-us/104984)
+- [Installing the Command Line Tools](https://developer.apple.com/library/archive/technotes/tn2339/_index.html)
+- [Volume encryption with FileVault](https://support.apple.com/guide/security/volume-encryption-with-filevault-sec4c6dc1b6e/web)
+- [Protect data with FileVault](https://support.apple.com/guide/mac-help/protect-data-on-your-mac-with-filevault-mh11785/mac)
+- [Background Security Improvements](https://support.apple.com/guide/mac-help/install-background-security-improvements-mchl44c4c70c/mac)
+- [macOS firewall](https://support.apple.com/guide/mac-help/block-connections-to-your-mac-with-a-firewall-mh34041/mac)
+- [Time Machine](https://support.apple.com/en-us/104984)
 
 ## Homebrew
 
 - [Installation](https://docs.brew.sh/Installation)
 - [Reviewed Homebrew installer commit](https://github.com/Homebrew/install/commit/99e13e96cbbdc1ac1ac09c0a40b450bf219ef3aa)
-- [Homebrew Bundle and Brewfile command reference](https://docs.brew.sh/Manpage#bundle-subcommand)
-- [Support tiers](https://docs.brew.sh/Support-Tiers)
-- [Homebrew security and supply chain](https://docs.brew.sh/Supply-Chain-Security)
+- [Homebrew Bundle command reference](https://docs.brew.sh/Manpage#bundle-subcommand)
+- [Support tiers and native prefixes](https://docs.brew.sh/Support-Tiers)
+- [Supply-chain security](https://docs.brew.sh/Supply-Chain-Security)
 - [Tap trust](https://docs.brew.sh/Tap-Trust)
 - [Formulae and cask catalog](https://formulae.brew.sh/)
 
@@ -30,15 +31,18 @@ These sources informed the repository's current behavior. They are intentionally
 - [GitHub CLI manual](https://cli.github.com/manual/)
 - [`gh auth login`](https://cli.github.com/manual/gh_auth_login)
 - [Connecting to GitHub with SSH](https://docs.github.com/en/authentication/connecting-to-github-with-ssh)
-- [Generating a new SSH key and adding it to the agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+- [Generating an SSH key and adding it to the agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
-## Runtime tools
+## Runtime and repository tools
 
 - [mise documentation](https://mise.jdx.dev/)
 - [Installing mise](https://mise.jdx.dev/installing-mise.html)
+- [mise GitHub Action](https://github.com/jdx/mise-action)
 - [uv documentation](https://docs.astral.sh/uv/)
 - [Installing uv](https://docs.astral.sh/uv/getting-started/installation/)
 - [uv tool environments](https://docs.astral.sh/uv/concepts/tools/)
+- [Node.js releases](https://nodejs.org/en/about/previous-releases)
+- [Ruby downloads](https://www.ruby-lang.org/en/downloads/)
 
 ## Optional command-line tools
 
@@ -46,10 +50,10 @@ These sources informed the repository's current behavior. They are intentionally
 - [fd](https://github.com/sharkdp/fd#readme)
 - [fzf](https://github.com/junegunn/fzf#readme)
 - [jq manual](https://jqlang.org/manual/)
-- [ripgrep (`rg`)](https://github.com/BurntSushi/ripgrep#readme)
+- [ripgrep](https://github.com/BurntSushi/ripgrep#readme)
 - [ShellCheck](https://www.shellcheck.net/)
 - [shfmt](https://github.com/mvdan/sh#shfmt)
-- [`tree` Homebrew formula](https://formulae.brew.sh/formula/tree)
+- [`tree`](https://formulae.brew.sh/formula/tree)
 
 ## Optional applications
 
@@ -70,14 +74,15 @@ These sources informed the repository's current behavior. They are intentionally
 
 ## Repository automation
 
+- [GitHub-hosted runner reference](https://docs.github.com/actions/using-github-hosted-runners/about-github-hosted-runners)
+- [Runner image catalog](https://github.com/actions/runner-images)
 - [actions/checkout](https://github.com/actions/checkout)
 - [Reviewed `actions/checkout` v7 commit](https://github.com/actions/checkout/commit/9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0)
-- [ShellCheck](https://www.shellcheck.net/)
-- [shfmt](https://github.com/mvdan/sh)
+- [Reviewed `jdx/mise-action` v4 commit](https://github.com/jdx/mise-action/commit/dad1bfd3df957f44999b559dd69dc1671cb4e9ea)
 - [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2)
 
 ## Review policy
 
 A reference appearing here does not make every upstream recommendation mandatory. The repository applies a narrower policy based on its threat model and design principles.
 
-When upstream behavior changes, update the script and explanatory document in the same commit. Avoid preserving an obsolete command merely because it once appeared in a popular article.
+When upstream behavior changes, update the script, tests, and explanatory document together. Do not preserve an obsolete command only because it once appeared in a popular article.

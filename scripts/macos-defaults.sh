@@ -42,10 +42,10 @@ done
   printf '[ERROR] This script supports macOS only.\n' >&2
   exit 1
 }
-[[ "$EUID" -ne 0 ]] || {
+if [[ "$EUID" -eq 0 && "${MODERN_MAC_TESTING:-0}" != '1' ]]; then
   printf '[ERROR] Do not run this script as root or with sudo.\n' >&2
   exit 1
-}
+fi
 
 print_command() {
   printf '+'

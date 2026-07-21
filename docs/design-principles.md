@@ -1,74 +1,67 @@
 # Design Principles
 
-This repository is intentionally smaller than many fresh-install guides. The omissions are part of the design.
+## 1. Recovery precedes convenience
 
-## 1. Recovery before productivity
+The first setup problem is not package installation. It is proving that data, identity, and account recovery survive loss, migration, or a failed change.
 
-The first irreversible failure on a new machine is usually lost data, locked accounts, or missing recovery material—not a missing terminal theme. FileVault, account recovery, updates, and tested backups therefore precede package installation.
+## 2. Bootstrap dependencies must be acyclic
 
-## 2. Automate facts, not taste
+Apple Command Line Tools provide Git and clang before Homebrew exists. Apple Git clones and verifies this repository. Homebrew then installs the selected foundation. Homebrew Git is optional rather than a hidden prerequisite.
 
-Package declarations are suitable for automation because their desired state can be reviewed. Dock layout, key repeat, terminal themes, browser extensions, and notification choices depend on the person, hardware, and accessibility needs.
+A setup that requires its own not-yet-installed package manager or Git executable is not bootstrappable from a new Mac.
 
-The preferences script includes only settings with a narrow effect, a clear explanation, and a recorded previous value.
+## 3. One owner per responsibility
 
-## 3. A small default minimizes drift
-
-Every default package becomes a transitive dependency, update obligation, supply-chain relationship, disk consumer, and future migration decision. The foundation contains four tools. Everything else must justify itself in a separate layer.
-
-## 4. One owner per responsibility
-
-- macOS owns operating-system updates and built-in security controls.
-- Homebrew owns selected system-level packages and applications.
-- `uv` owns Python project environments and Python tools.
-- `mise` owns project-pinned non-Python runtimes and tools.
-- each project owns its required versions and lockfiles.
+- macOS owns operating-system updates and built-in security controls;
+- Apple Command Line Tools own bootstrap Git and clang;
+- Homebrew owns selected machine-level formulae and applications;
+- `uv` owns Python project environments and Python tools;
+- `mise` owns project-pinned non-Python runtimes and this repository's development tools;
+- each project owns required versions and lockfiles;
 - a password manager or approved secrets system owns secrets.
 
-Overlapping owners create conflicts: multiple Python managers, two Homebrew prefixes, several container desktops, or both global and project-local versions of the same tool.
+Overlapping owners create drift: two Homebrew prefixes, several Python managers, competing container desktops, or both global and project-local versions of the same tool.
 
-## 5. Native architecture by default
+## 4. A small default minimizes long-term cost
 
-A new Apple-silicon Mac should run native tools from `/opt/homebrew`. The bootstrap rejects Rosetta translation to prevent accidental Intel package state. Legacy translation is added only for a named application with an exit plan.
+Every default package adds transitive dependencies, update work, supply-chain relationships, disk use, and a future migration decision. The default Homebrew foundation contains three tools. Apple Git is already present through the prerequisite developer tools.
 
-The scripts still recognize native Intel Homebrew at `/usr/local` while supported, but the documentation does not assume Intel has an indefinite future.
+Everything else must justify itself in an optional layer.
 
-## 6. No hidden privilege escalation
+## 5. Native architecture is an invariant
 
-The repository does not run itself with `sudo`, does not run `sudo brew`, and does not install passwordless sudo rules. Homebrew's official installer may request administrator authorization for its documented initial setup.
+An Apple-silicon process uses `/opt/homebrew`; a native Intel process uses `/usr/local`. The bootstrap derives one correct path and rejects a conflicting `brew` in `PATH` rather than guessing.
 
-Scripts exit when launched as root because root-owned files in a user's home directory create persistent and confusing failures.
+Rosetta is allowed only for a named legacy application with an exit plan. It is not a general new-Mac prerequisite.
 
-## 7. Inspect remote code before execution
+## 6. Presence is not health
 
-The bootstrap downloads Homebrew's official installer to a temporary file rather than piping the network response directly to Bash. The user grants that operation explicitly with `--install-homebrew`.
+An executable bit does not prove a tool works. Audits and CI run version or diagnostic commands, preserve exit status, and report the resolved path.
 
-Package managers still execute installation logic and vendor packages. Automation narrows and records trust; it does not eliminate it.
+This avoids false `[OK]` output when a developer-tool shim, package, or authentication helper is broken.
 
-## 8. No secrets in reproducible configuration
+## 7. Automation must expose trust and privilege
 
-A public setup repository is hostile storage for secrets. The repository ignores common local secret paths, but `.gitignore` is not a security boundary. Never place private keys, tokens, recovery codes, certificates with private material, or environment secrets in the working tree.
+The repository does not run itself with `sudo`, does not use `sudo brew`, and does not install passwordless sudo rules. Homebrew's official installer may request administrator authorization for its documented initial setup.
 
-Use templates that reference an external secrets provider. Scan staged changes before every public push.
+Remote code is downloaded to a file, pinned to an immutable upstream commit, checked against a reviewed Git blob, and only then executed.
 
-## 9. Idempotent, additive, and reversible where practical
+## 8. State-changing operations must be bounded and rerunnable
 
-Rerunning package installation should converge on declared packages. Shell setup detects its managed block. Preferences are opt-in and snapshot prior values.
+Scripts change named files, packages, or preference keys. They back up user-owned configuration before replacement, reject malformed state, and make optional behavior explicit through flags.
 
-The repository avoids destructive “cleanup to match” operations because a public guide cannot know whether undeclared software is intentional.
+Idempotence means a second run converges without duplicate shell blocks or unrelated upgrades; it does not mean every external installer is perfectly reversible.
 
-## 10. Honest reproducibility
+## 9. Secrets and identity are never defaults
 
-A Brewfile records names and categories, not a complete cryptographic lock of every installed artifact. `--no-upgrade` reduces surprise but does not pin missing packages to historical versions.
+A public setup repository must not contain tokens, private keys, recovery material, personal email addresses, internal hosts, VPN details, or device identifiers. Authentication and authorship require deliberate user decisions after the foundation is installed.
 
-Strong reproducibility belongs closer to projects through lockfiles, containers, Nix, dev environments, or other appropriately scoped systems. This repository aims for a reviewable machine baseline, not an immutable workstation image.
+## 10. Evidence must be described accurately
 
-## 11. Manual privacy grants are a feature
+A mocked Linux test, a pre-provisioned GitHub-hosted Mac, and a clean retail Mac prove different things. Documentation names each evidence class and does not market a hosted package test as a clean-machine bootstrap.
 
-macOS privacy prompts are moments for informed consent. Scripts should not bypass Transparency, Consent, and Control protections or install configuration profiles to pre-authorize personal applications.
+## 11. Current recommendations require recurring human judgment
 
-Managed organizations may use MDM for approved policy. That is a separate administrative trust model and should not be imitated by a personal setup script.
+Automation can detect missing tokens, broken commands, inconsistent declarations, and upstream releases. It cannot decide whether a vendor remains trustworthy, a license remains appropriate, or a permission request remains justified.
 
-## 12. Primary sources over copied recipes
-
-Commands are checked against Apple, Homebrew, GitHub, `mise`, and `uv` documentation. Blog posts can identify useful questions, but copied commands age quickly and often omit threat models, architecture assumptions, and rollback behavior.
+Quarterly editorial review and annual clean-machine acceptance complement continuous checks.

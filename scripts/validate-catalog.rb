@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# encoding: UTF-8
 # frozen_string_literal: true
 
 require "yaml"
@@ -9,14 +10,15 @@ CATALOG_PATH = File.join(ROOT, "config", "packages.yml")
 README_PATH = File.join(ROOT, "README.md")
 FILES_BY_GROUP = {
   "foundation" => File.join(ROOT, "Brewfile"),
+  "git" => File.join(ROOT, "Brewfile.git"),
   "cli" => File.join(ROOT, "Brewfile.cli"),
   "apps" => File.join(ROOT, "Brewfile.apps.example")
 }.freeze
 
 errors = []
-catalog = YAML.safe_load(File.read(CATALOG_PATH), permitted_classes: [], aliases: false)
+catalog = YAML.safe_load(File.read(CATALOG_PATH, encoding: "UTF-8"), permitted_classes: [], aliases: false)
 packages = catalog.fetch("packages")
-readme = File.read(README_PATH)
+readme = File.read(README_PATH, encoding: "UTF-8")
 
 seen = {}
 packages.each do |package|
@@ -40,20 +42,24 @@ packages.each do |package|
     errors << "invalid docs URL for #{token}: #{docs}"
   end
 
+  next unless FILES_BY_GROUP.key?(group)
+
   declaration = type == "cask" ? %(cask "#{token}") : %(brew "#{token}")
   target = FILES_BY_GROUP.fetch(group)
-  contents = File.read(target)
+  contents = File.read(target, encoding: "UTF-8")
   errors << "missing #{declaration} in #{File.basename(target)}" unless contents.include?(declaration)
   errors << "README is missing docs URL for #{token}: #{docs}" unless readme.include?(docs)
 end
 
 FILES_BY_GROUP.each_value do |path|
-  File.foreach(path).with_index(1) do |line, line_number|
+  File.foreach(path, encoding: "UTF-8").with_index(1) do |line, line_number|
     next unless (match = line.match(/^\s*#?\s*(brew|cask)\s+"([^"]+)"/))
 
     type = match[1] == "brew" ? "formula" : "cask"
     token = match[2]
-    errors << "uncataloged declaration in #{File.basename(path)}:#{line_number}: #{type} #{token}" unless seen[[type, token]]
+    next if seen[[type, token]]
+
+    errors << "uncataloged declaration in #{File.basename(path)}:#{line_number}: #{type} #{token}"
   end
 end
 

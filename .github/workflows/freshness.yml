@@ -11,8 +11,9 @@ permissions:
 
 jobs:
   freshness:
-    runs-on: macos-15
+    runs-on: macos-26
     timeout-minutes: 40
+
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -29,7 +30,9 @@ jobs:
             echo
             echo "Generated: $(date -u '+%Y-%m-%d %H:%M UTC')"
             echo
-            echo "This report verifies that every cataloged Homebrew token still resolves and asks Homebrew Livecheck whether upstream releases have moved. A difference is evidence to review, not permission to change recommendations automatically."
+            echo "Environment: pre-provisioned GitHub-hosted macOS runner ($(uname -m)); this is not a clean-Mac bootstrap test."
+            echo
+            echo "This report verifies that cataloged Homebrew tokens resolve and asks Homebrew Livecheck whether upstream releases have moved. A difference is evidence to review, not permission to change recommendations automatically."
             echo
           } > freshness-report.md
 
@@ -44,12 +47,13 @@ jobs:
               livecheck_args = type == "cask" ? ["brew", "livecheck", "--cask", token] : ["brew", "livecheck", "--formula", token]
               livecheck = IO.popen(livecheck_args, err: [:child, :out], &:read).strip
               status = resolves ? "resolves" : "DOES NOT RESOLVE"
-              report.puts "## #{package.fetch("name")} (`#{token}`)"
+              report.puts "## #{package.fetch('name')} (`#{token}`)"
               report.puts
+              report.puts "- Layer: #{package.fetch('group')}"
               report.puts "- Type: #{type}"
               report.puts "- Homebrew token: **#{status}**"
-              report.puts "- Documentation: #{package.fetch("docs")}"
-              report.puts "- Livecheck: `#{livecheck.empty? ? "no result" : livecheck.gsub("`", "'")}`"
+              report.puts "- Documentation: #{package.fetch('docs')}"
+              report.puts "- Livecheck: `#{livecheck.empty? ? 'no result' : livecheck.gsub('`', "'")}`"
               report.puts
             end
           end

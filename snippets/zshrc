@@ -1,13 +1,44 @@
 # >>> modern-mac-setup >>>
-# Initialize Homebrew from its supported default prefix without assuming CPU
-# architecture. This supports native Apple silicon and native Intel shells.
-if [[ -x /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-elif [[ -x /usr/local/bin/brew ]]; then
-  eval "$(/usr/local/bin/brew shellenv)"
+# managed-version: 2
+# Select only the Homebrew prefix that matches the current native architecture.
+_modern_mac_translated="$(sysctl -n sysctl.proc_translated 2>/dev/null || true)"
+_modern_mac_brew=""
+_modern_mac_expected_prefix=""
+_modern_mac_other_brew=""
+
+if [[ "$_modern_mac_translated" == "1" ]]; then
+  printf '%s\n' 'modern-mac-setup: translated shell detected; Homebrew was not initialized.' >&2
+else
+  case "$(uname -m)" in
+    arm64)
+      _modern_mac_brew="/opt/homebrew/bin/brew"
+      _modern_mac_expected_prefix="/opt/homebrew"
+      _modern_mac_other_brew="/usr/local/bin/brew"
+      ;;
+    x86_64)
+      _modern_mac_brew="/usr/local/bin/brew"
+      _modern_mac_expected_prefix="/usr/local"
+      _modern_mac_other_brew="/opt/homebrew/bin/brew"
+      ;;
+  esac
+
+  if [[ -n "$_modern_mac_brew" && -x "$_modern_mac_brew" ]]; then
+    _modern_mac_actual_prefix="$("$_modern_mac_brew" --prefix 2>/dev/null || true)"
+    if [[ "$_modern_mac_actual_prefix" == "$_modern_mac_expected_prefix" ]]; then
+      eval "$("$_modern_mac_brew" shellenv)"
+    else
+      printf 'modern-mac-setup: Homebrew at %s reports unexpected prefix: %s\n' \
+        "$_modern_mac_brew" "${_modern_mac_actual_prefix:-unknown}" >&2
+    fi
+  elif [[ -n "$_modern_mac_other_brew" && -x "$_modern_mac_other_brew" ]]; then
+    printf 'modern-mac-setup: Homebrew exists only at the other architecture path: %s\n' \
+      "$_modern_mac_other_brew" >&2
+  fi
 fi
 
-# Activate project-pinned tools only after Homebrew is available.
+unset _modern_mac_translated _modern_mac_brew _modern_mac_expected_prefix
+unset _modern_mac_actual_prefix _modern_mac_other_brew
+
 if command -v mise >/dev/null 2>&1; then
   eval "$(mise activate zsh)"
 fi

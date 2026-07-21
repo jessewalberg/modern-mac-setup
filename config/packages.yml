@@ -1,13 +1,13 @@
-# Source of truth for automated package validation.
+# Source of truth for automated Homebrew package validation.
 #
-# This catalog does not pin Homebrew versions. Homebrew is a rolling package
-# manager; the workflows verify that tokens resolve, installs succeed, expected
-# commands/apps exist, and upstream projects remain current.
+# Homebrew is a rolling package manager. Workflows verify that tokens resolve,
+# installs succeed, expected commands/apps exist, and recommendations remain
+# documented. Project validation tools are pinned separately in mise.toml.
 
 packages:
   - token: git
     type: formula
-    group: foundation
+    group: git
     command: git
     name: Git
     docs: https://git-scm.com/docs/git
@@ -67,20 +67,6 @@ packages:
     command: rg
     name: ripgrep
     docs: https://github.com/BurntSushi/ripgrep#readme
-
-  - token: shellcheck
-    type: formula
-    group: cli
-    command: shellcheck
-    name: ShellCheck
-    docs: https://www.shellcheck.net/
-
-  - token: shfmt
-    type: formula
-    group: cli
-    command: shfmt
-    name: shfmt
-    docs: https://github.com/mvdan/sh#shfmt
 
   - token: tree
     type: formula

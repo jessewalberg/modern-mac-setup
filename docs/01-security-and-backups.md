@@ -1,35 +1,40 @@
 # Security and Backups
 
-The secure baseline is manual because these controls involve recovery choices, physical possession, privacy prompts, and user intent. A shell script should not make those decisions silently.
+The secure baseline is manual because recovery choices, physical possession, privacy prompts, and user intent should not be delegated to an unattended shell script.
 
 ## FileVault and recovery
 
 Open **System Settings → Privacy & Security → FileVault** and confirm FileVault is on.
 
-On Apple silicon and T2-equipped Macs, storage is hardware-encrypted even before FileVault is enabled, but enabling FileVault binds access to authorized credentials and strengthens protection against offline access. Choose either account-based recovery or a recovery key according to the ownership model.
+On Apple silicon and T2-equipped Macs, storage is hardware-encrypted before FileVault is enabled, but FileVault binds access to authorized credentials and strengthens protection against offline access. Choose account-based recovery or a recovery key according to the ownership model.
 
 For a recovery key:
 
 - store it outside the Mac;
-- do not put it in this repository, a shell history file, a screenshot folder, or an unencrypted note;
+- do not put it in this repository, shell history, screenshots, or an unencrypted note;
 - verify it was recorded accurately before depending on it;
-- understand that losing both the login credentials and recovery method can make the data unrecoverable.
+- understand that losing both login credentials and recovery material can make data unrecoverable.
 
 Read Apple's [FileVault security architecture](https://support.apple.com/guide/security/volume-encryption-with-filevault-sec4c6dc1b6e/web) and [Mac Help instructions](https://support.apple.com/guide/mac-help/protect-data-on-your-mac-with-filevault-mh11785/mac).
 
 ## Automatic updates and background security improvements
 
-Open **System Settings → General → Software Update → Automatic Updates** and enable the update behaviors appropriate for the machine. Also open **Privacy & Security → Background Security Improvements** and enable automatic installation.
+Open **System Settings → General → Software Update → Automatic Updates** and enable the security-update behavior appropriate for the machine.
 
-Automatic installation does not remove the need to review major-version upgrades. Security patches and major operating-system migrations have different risk profiles and should not be treated as the same operation.
+The label **Background Security Improvements** is version-dependent:
+
+- on macOS 26.1 or later, open **Privacy & Security → Background Security Improvements** and enable automatic installation;
+- on macOS 14, 15, or macOS 26.0, use the automatic security and system-data update controls presented under Software Update.
+
+Do not interpret this as permission to apply every major-version upgrade without review. Rapid security responses, patch releases, and major operating-system migrations have different compatibility risk.
 
 Apple documents [Background Security Improvements](https://support.apple.com/guide/mac-help/install-background-security-improvements-mchl44c4c70c/mac) separately from standard software updates.
 
 ## Firewall and sharing
 
-Open **System Settings → Network → Firewall** and enable the application firewall. Then review its options rather than enabling “block all” without understanding application needs.
+Open **System Settings → Network → Firewall** and enable the application firewall when it fits the machine's network and application requirements. Review the options rather than enabling “block all” without understanding the impact.
 
-Open **System Settings → General → Sharing** and turn off services that are not deliberately used, including Remote Login, Remote Management, File Sharing, Media Sharing, and Internet Sharing. A developer may need one of these; the important property is that each listening service has an owner and purpose.
+Open **System Settings → General → Sharing** and turn off services that are not deliberately used, including Remote Login, Remote Management, File Sharing, Media Sharing, and Internet Sharing. A developer may need one of these; every listening service should have a named owner and purpose.
 
 Apple's [firewall guide](https://support.apple.com/guide/mac-help/block-connections-to-your-mac-with-a-firewall-mh34041/mac) explains how signed applications and sharing services interact with the firewall.
 
@@ -37,17 +42,17 @@ Apple's [firewall guide](https://support.apple.com/guide/mac-help/block-connecti
 
 Under **Lock Screen** and **Touch ID & Password**:
 
-- require authentication promptly after sleep or the screen saver begins;
+- require authentication promptly after sleep or screen saver;
 - add only trusted fingerprints;
 - avoid automatic login;
 - review Apple Watch unlock according to the physical threat model;
-- use a short enough idle interval for the places where the Mac is used.
+- choose an idle interval appropriate for where the Mac is used.
 
-Security controls should match actual environments. A stationary home desktop and a laptop used in airports have different physical exposure.
+A stationary home desktop and a laptop used in airports have different exposure. Document the intended context rather than copying one universal timeout.
 
 ## Login items, extensions, and privacy permissions
 
-Review **General → Login Items & Extensions**. Remove background items that have no current purpose.
+Review **General → Login Items & Extensions**. Remove background items with no current purpose.
 
 Review **Privacy & Security** categories, especially:
 
@@ -61,35 +66,35 @@ Review **Privacy & Security** categories, especially:
 - Local Network;
 - Camera and Microphone.
 
-Grant a permission when a feature is understood and needed, not simply because an installer asks. Revisit these lists during maintenance because old software often leaves privileges behind.
+Grant a permission only when the feature is understood and needed. Revisit these lists during maintenance because removed software can leave privileges or helper components behind.
 
 ## Find My and activation ownership
 
-For a personally owned Mac, Find My can support locating, locking, and erasing the device. Confirm the Apple account is recoverable and that activation ownership will be removed before sale or transfer.
+For a personally owned Mac, Find My can support locating, locking, and erasing the device. Confirm the Apple account is recoverable and remove activation ownership before sale or transfer.
 
-Corporate and shared machines may use organizational management instead. Follow the organization's ownership and offboarding process rather than mixing personal and managed recovery paths.
+Corporate and shared machines may use organizational management instead. Follow the organization's enrollment and offboarding process rather than mixing personal and managed recovery paths.
 
 ## Backups
 
-Configure Time Machine or another tested, encrypted backup before the machine accumulates irreplaceable work. Apple recommends a Time Machine disk with at least twice the Mac's storage capacity in its [Time Machine guide](https://support.apple.com/en-us/104984).
+Configure Time Machine or another tested, encrypted backup before the machine accumulates irreplaceable work. Apple's [Time Machine guide](https://support.apple.com/en-us/104984) recommends a destination with enough capacity for retained history.
 
 A strong baseline includes:
 
 - one automatic local or network backup;
 - one off-device or off-site copy for important data;
-- version control for source code, with branches pushed or otherwise backed up;
+- version control for source code, with important branches pushed or otherwise backed up;
 - periodic restore tests.
 
-Synchronization is not automatically backup. Deletion, account compromise, ransomware, or application corruption may synchronize the unwanted change.
+Synchronization is not automatically backup. Deletion, account compromise, ransomware, and application corruption can synchronize the unwanted state.
 
-## Run the read-only audit
+## Run the preflight audit
 
-After the manual review:
+After the manual review and Command Line Tools installation:
 
 ```bash
-./scripts/audit.sh
+./scripts/audit.sh --preflight
 ```
 
-The audit checks observable state such as FileVault, the firewall, Gatekeeper, SIP, Time Machine, architecture, Command Line Tools, and the package foundation. It cannot verify recovery-key storage, account recovery, backup restore quality, or whether each privacy grant is justified.
+The audit checks observable state such as FileVault, firewall, Gatekeeper, SIP, Time Machine, native architecture, developer tools, and Homebrew-prefix safety. It cannot verify recovery-key storage, account recovery, restore quality, or whether every privacy grant is justified.
 
 Continue with [Bootstrap](02-bootstrap.md).

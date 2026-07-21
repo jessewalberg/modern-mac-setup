@@ -14,6 +14,7 @@ on:
           - quarterly
           - major-macos-release
           - annual-clean-machine
+          - bootstrap-security
 
 permissions:
   contents: read
@@ -23,6 +24,7 @@ jobs:
   open-review:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+
     steps:
       - name: Check out repository
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -44,42 +46,44 @@ jobs:
           cat > editorial-review.md <<EOF
           # $REVIEW_TYPE review
 
-          Automated checks prove that declarations resolve and installations execute. This review decides whether the recommendations and instructions are still good.
+          Automated checks establish bounded technical evidence. This review decides whether the instructions and recommendations remain good.
 
-          ## Platform assumptions
+          ## Platform and bootstrap
 
-          - [ ] Confirm the supported macOS versions and Apple silicon/Intel policy.
-          - [ ] Review changes introduced by the latest macOS release and security updates.
-          - [ ] Confirm System Settings names, paths, screenshots, and privacy prompts.
-          - [ ] Verify Command Line Tools and Homebrew bootstrap instructions from official sources.
+          - [ ] Confirm supported macOS versions and Apple silicon/Intel policy.
+          - [ ] Review changes in the latest macOS and Command Line Tools releases.
+          - [ ] Verify Apple Git remains a sufficient bootstrap/default Git.
+          - [ ] Confirm native Homebrew prefixes and wrong-architecture rejection.
+          - [ ] Review the pinned Homebrew installer commit and blob.
+          - [ ] Confirm System Settings names, availability by macOS version, and privacy prompts.
 
           ## Packages and applications
 
-          - [ ] Review the monthly freshness issue and all unresolved tokens.
-          - [ ] Confirm every recommended app's vendor, ownership, license, update channel, and Apple silicon support.
+          - [ ] Review the monthly freshness issue and unresolved tokens.
+          - [ ] Confirm each recommended app's vendor, ownership, license, update channel, and architecture support.
           - [ ] Review requested permissions, login items, extensions, and uninstall behavior.
           - [ ] Look for safer, simpler, native, or open-source alternatives.
-          - [ ] Confirm competing applications are presented as choices rather than installed together.
+          - [ ] Confirm competing tools remain explicit choices.
           - [ ] Remove recommendations that no longer earn their maintenance or security cost.
 
-          ## Guidance quality
+          ## Guidance and evidence
 
-          - [ ] Walk every README path and documentation link.
-          - [ ] Confirm advice is sourced from primary documentation where practical.
-          - [ ] Check that manual steps remain manual when automation would require secrets or privileged permissions.
-          - [ ] Confirm examples, commands, expected outputs, and troubleshooting guidance.
-          - [ ] Update human-review dates only after completing the review.
+          - [ ] Walk the README path and every documentation link.
+          - [ ] Confirm primary sources for platform-sensitive statements.
+          - [ ] Verify that hosted runner tests are not described as clean-Mac tests.
+          - [ ] Confirm examples, expected outputs, negative cases, and troubleshooting steps.
+          - [ ] Update human-review dates only after completing this review.
 
-          ## Clean-machine acceptance test
+          ## Clean-machine acceptance
 
-          Complete this section for an annual review, a major macOS release, or any material bootstrap change.
+          Complete this section for annual, major macOS, or material bootstrap changes.
 
-          - [ ] Run the guide on a clean or disposable Mac.
-          - [ ] Test the minimal foundation and optional CLI bundle.
-          - [ ] Test one representative reviewed applications file.
-          - [ ] Apply and rerun macOS preference changes to check idempotency.
-          - [ ] Run the deep audit and document expected warnings.
-          - [ ] Test recovery, uninstall, and rerun behavior.
+          - [ ] Follow docs/acceptance-test.md on a clean or disposable Mac.
+          - [ ] Test preflight, minimal foundation, new-shell persistence, and post-bootstrap audit.
+          - [ ] Test optional CLI and Homebrew Git separately.
+          - [ ] Test one representative reviewed application file.
+          - [ ] Test rerun, backup, recovery, and removal behavior.
+          - [ ] Record expected warnings and redact all personal or organizational data.
 
           Workflow run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID
           EOF

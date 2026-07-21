@@ -1,0 +1,9 @@
+# Optional newer Git managed by Homebrew.
+# Install with: ./scripts/bootstrap.sh --with-homebrew-git
+#
+# Apple's Command Line Tools already provide the Git used to clone and bootstrap
+# this repository. Install this layer only for a specific newer-Git requirement.
+
+# Git (command: git): distributed version control.
+# Docs: https://git-scm.com/docs/git
+brew "git"

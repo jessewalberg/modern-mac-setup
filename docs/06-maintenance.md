@@ -1,112 +1,116 @@
 # Maintenance
 
-A reproducible setup is a maintained process, not a one-time script.
+A reproducible setup is a maintained decision record, not a one-time installation script.
 
-## Weekly or after security notices
+## Routine checks
 
-1. Install current macOS security updates and Background Security Improvements.
-2. Update browsers, password managers, VPN clients, container platforms, and communication tools promptly.
-3. Review any application asking for a new privileged permission after an update.
-4. Push or back up important repository work.
-
-Apple's current security-release list is maintained at [Apple security releases](https://support.apple.com/en-us/100100).
-
-## Monthly package review
-
-Inspect before upgrading:
+Run monthly or before a material toolchain change:
 
 ```bash
+softwareupdate --list
 brew update
 brew outdated
 mise outdated
+uv tool list
+./scripts/audit.sh --post-bootstrap --deep
 ```
 
-Apply reviewed Homebrew upgrades:
+Review output before applying upgrades. Do not combine operating-system upgrades, package-manager upgrades, runtime migrations, and application replacements into one unreviewable change window.
+
+## Homebrew maintenance
+
+Inspect pending changes:
 
 ```bash
-brew upgrade
-brew cleanup
+brew outdated
+brew livecheck --installed
+brew services list
+brew doctor
 ```
 
-`brew cleanup` removes old package versions and cache material; it does not make the machine match a Brewfile. Do not run `brew bundle cleanup --force` casually because it can remove software not represented in the selected bundle.
+Apply deliberate upgrades:
 
-Verify declarations without forcing upgrades:
+```bash
+brew upgrade FORMULA
+brew upgrade --cask CASK
+```
+
+Use broad `brew upgrade` only when the scope and rollback implications are understood. Never use `sudo brew`, and do not apply recursive ownership fixes copied from unrelated machines.
+
+Review cleanup before deleting old versions or downloads:
+
+```bash
+brew cleanup --dry-run
+```
+
+## Brewfile drift
+
+Check each layer independently:
 
 ```bash
 brew bundle check --file=Brewfile --no-upgrade
+brew bundle check --file=Brewfile.git --no-upgrade
 brew bundle check --file=Brewfile.cli --no-upgrade
 ```
 
-For a reviewed apps file:
+An optional layer can be intentionally unsatisfied. Do not use `brew bundle cleanup --force` as a generic synchronization step: absence from a public Brewfile is not permission to remove locally required software.
+
+## Runtime maintenance
+
+Project owners should update versions and lockfiles in their repositories. The new-Mac repository should not silently redefine project requirements.
+
+For this repository's own validation tools:
 
 ```bash
-brew bundle check --file=Brewfile.apps --no-upgrade
+mise install
+mise outdated
+mise run lint
 ```
 
-## Audit privileged state
+Update `mise.toml` in a reviewed pull request and confirm the full suite on Linux plus both hosted macOS architectures.
 
-Review these System Settings periodically:
+## Shell block maintenance
 
-- Login Items & Extensions;
-- Accessibility;
-- Full Disk Access;
-- Screen & System Audio Recording;
-- Input Monitoring;
-- Local Network;
-- Files & Folders;
-- VPN & Filters;
-- Sharing;
-- Firewall options.
-
-Remove permissions and background items for software no longer used, then uninstall the software through its documented removal path.
-
-## Run diagnostics
+Run:
 
 ```bash
-./scripts/audit.sh --deep
+./scripts/configure-shell.sh --dry-run
+./scripts/configure-shell.sh
 ```
 
-Also review:
+The managed block is versioned and replaced in place. An unchanged block produces no backup; a real update backs up `.zshrc`. Symlinked dotfiles are intentionally left to their source manager.
 
-```bash
-brew doctor
-mise doctor
-gh auth status --hostname github.com
-```
+## Security and privacy review
 
-A clean `brew doctor` is useful but not a security attestation. Some warnings are expected on intentionally customized systems.
+Quarterly and after meaningful application changes:
 
-## Review GitHub access
+- review Login Items & Extensions;
+- review Accessibility, Full Disk Access, Screen Recording, Input Monitoring, Automation, Local Network, Camera, and Microphone grants;
+- confirm FileVault, firewall, Gatekeeper, SIP, backup, and account recovery;
+- remove stale browser extensions, VPN profiles, certificates, and hardware-token registrations;
+- review vendor ownership, licensing, telemetry, and update channels for selected applications.
 
-Periodically review:
+## Repository automation
 
-- SSH keys;
-- personal access tokens;
-- authorized OAuth and GitHub Apps;
-- organization access;
-- signed-in devices and security keys;
-- recovery codes and multi-factor authentication methods.
+The workflows provide separate evidence:
 
-Revoke credentials that are unknown, unused, or tied to retired devices. Rotation is most valuable when a key is exposed, weak, shared, or outside policy; arbitrary rotation without inventory can create outages.
+- lint and mocked failure-path tests on Linux;
+- package resolution and installation on pre-provisioned Apple-silicon and Intel macOS runners;
+- monthly Homebrew token and upstream freshness reports;
+- quarterly editorial-review reminders;
+- weekly pinned GitHub Actions update proposals.
 
-## Test recovery
+Hosted runners are not clean retail Macs. They already contain developer tools and Homebrew. The [acceptance test](acceptance-test.md) covers the real first-boot sequence and remains a human release obligation.
 
-A backup that has never been restored is an assumption. On a recurring schedule:
+## When to repeat the acceptance test
 
-1. confirm the backup destination is receiving new snapshots;
-2. restore representative files to a separate location;
-3. verify source repositories and unpushed work;
-4. confirm password-manager and account recovery from another trusted device;
-5. review FileVault recovery handling;
-6. document anything that exists only on the Mac.
+Run the complete clean or disposable Mac procedure:
 
-## Keep this repository current
+- at least annually;
+- after a major macOS release;
+- after changing Homebrew installer verification;
+- after changing architecture or shell initialization logic;
+- after changing Command Line Tools assumptions;
+- after a serious bootstrap or recovery defect.
 
-When a command or package changes:
-
-1. prefer an official primary source;
-2. update the relevant documentation and script together;
-3. preserve compatibility with the system Bash shipped by supported macOS versions;
-4. run the linters;
-5. avoid adding a dependency only to support the setup script;
-6. record the review date when a platform assumption materially changes.
+Record the OS build, architecture, commit, selected options, expected warnings, failures, and corrective changes without publishing machine identifiers or credentials.

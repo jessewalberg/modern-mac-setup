@@ -1,0 +1,69 @@
+name: Validate maintenance
+
+on:
+  pull_request:
+    paths:
+      - "Brewfile*"
+      - "README.md"
+      - "config/**"
+      - "docs/**"
+      - "scripts/**"
+      - ".github/workflows/validate-maintenance.yml"
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "17 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  catalog:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Validate package catalog
+        run: ruby scripts/validate-catalog.rb
+
+  macos-install:
+    runs-on: macos-15
+    timeout-minutes: 35
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Update Homebrew metadata
+        run: brew update
+
+      - name: Validate package catalog
+        run: ruby scripts/validate-catalog.rb
+
+      - name: Verify package declarations resolve
+        run: |
+          ruby -ryaml -e '
+            packages = YAML.safe_load(File.read("config/packages.yml"), permitted_classes: [], aliases: false).fetch("packages")
+            packages.each do |package|
+              args = package.fetch("type") == "cask" ? ["brew", "info", "--cask", package.fetch("token")] : ["brew", "info", "--formula", package.fetch("token")]
+              abort("Unable to resolve #{package.fetch("type")} #{package.fetch("token")}") unless system(*args, out: File::NULL)
+            end
+          '
+
+      - name: Install foundation and CLI bundles
+        run: |
+          brew bundle install --file=Brewfile --no-upgrade
+          brew bundle install --file=Brewfile.cli --no-upgrade
+
+      - name: Verify expected commands
+        run: ruby scripts/verify-installed.rb foundation cli
+
+      - name: Run deep audit
+        run: ./scripts/audit.sh --deep

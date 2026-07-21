@@ -1,12 +1,25 @@
 # Modern Mac Setup
 
 [![Lint](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/lint.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/lint.yml)
+[![Maintenance validation](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/validate-maintenance.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/validate-maintenance.yml)
+[![Package freshness](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/freshness.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/freshness.yml)
 
 A security-conscious, reproducible guide for setting up a new Mac without turning one person's preferences into universal defaults.
 
-**Last reviewed:** July 21, 2026<br>
+**Last human review:** July 21, 2026<br>
+**Automated validation:** every relevant pull request and every Monday<br>
+**Upstream freshness review:** monthly<br>
+**Editorial review:** quarterly, after major macOS releases, and annually on a clean Mac<br>
 **Target:** macOS Sonoma 14 or newer, with macOS Tahoe 26 as the current primary release<br>
 **Hardware:** Apple silicon first; native Intel execution is supported while Homebrew supports it
+
+## Continuously maintained
+
+This is not intended to become a setup guide that slowly goes stale. The repository continuously checks that its Homebrew formulae and casks still resolve, that the foundation and CLI bundles install on a clean macOS runner, that documented command names exist, and that package metadata remains consistent with the Brewfiles and README.
+
+Every month, automation creates or refreshes a public package-freshness issue. Every quarter, it opens a human editorial-review checklist covering macOS changes, permissions, licensing, ownership, alternatives, and outdated advice that could still pass technically. GitHub Actions dependencies are reviewed weekly through Dependabot, and the complete guide is exercised on a clean or disposable Mac at least annually and after material platform changes.
+
+A green badge means the tested path worked at that commit. It is not a security certification and does not mean every optional application is right for every user. See [Continuous maintenance policy](MAINTENANCE.md) for the exact guarantees, cadence, and public evidence.
 
 This repository starts from first principles:
 
@@ -169,6 +182,7 @@ Every repository guide is linked here so the README remains the entry point.
 
 | Topic | Document |
 | --- | --- |
+| Continuous automated and human maintenance | [Maintenance policy](MAINTENANCE.md) |
 | Decisions before touching the machine | [Before you start](docs/00-before-you-start.md) |
 | FileVault, updates, firewall, permissions, and backup | [Security and backups](docs/01-security-and-backups.md) |
 | Homebrew, bundles, bootstrap flags, and shell setup | [Bootstrap](docs/02-bootstrap.md) |
@@ -204,10 +218,12 @@ It will not:
 Change one layer at a time:
 
 1. Add or remove package declarations in a Brewfile.
-2. Review the diff.
-3. Run `brew bundle check --no-upgrade`.
-4. Apply with `brew bundle install --no-upgrade`.
-5. Commit the rationale, not only the package name.
+2. Update `config/packages.yml` and the relevant documentation.
+3. Run `ruby scripts/validate-catalog.rb`.
+4. Review the diff.
+5. Run `brew bundle check --no-upgrade`.
+6. Apply with `brew bundle install --no-upgrade`.
+7. Commit the rationale, not only the package name.
 
 Project runtime versions belong in each project's `mise.toml`, `.tool-versions`, `.python-version`, or equivalent lock/configuration files. The new-Mac repository should not become a hidden source of project requirements.
 

@@ -1,0 +1,76 @@
+name: Package freshness
+
+on:
+  schedule:
+    - cron: "41 10 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  freshness:
+    runs-on: macos-15
+    timeout-minutes: 40
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Update Homebrew metadata
+        run: brew update
+
+      - name: Build freshness report
+        run: |
+          {
+            echo "# Monthly package freshness report"
+            echo
+            echo "Generated: $(date -u '+%Y-%m-%d %H:%M UTC')"
+            echo
+            echo "This report verifies that every cataloged Homebrew token still resolves and asks Homebrew Livecheck whether upstream releases have moved. A difference is evidence to review, not permission to change recommendations automatically."
+            echo
+          } > freshness-report.md
+
+          ruby -ryaml <<'RUBY'
+          packages = YAML.safe_load(File.read("config/packages.yml"), permitted_classes: [], aliases: false).fetch("packages")
+          File.open("freshness-report.md", "a") do |report|
+            packages.each do |package|
+              token = package.fetch("token")
+              type = package.fetch("type")
+              info_args = type == "cask" ? ["brew", "info", "--cask", token] : ["brew", "info", "--formula", token]
+              resolves = system(*info_args, out: File::NULL, err: File::NULL)
+              livecheck_args = type == "cask" ? ["brew", "livecheck", "--cask", token] : ["brew", "livecheck", "--formula", token]
+              livecheck = IO.popen(livecheck_args, err: [:child, :out], &:read).strip
+              status = resolves ? "resolves" : "DOES NOT RESOLVE"
+              report.puts "## #{package.fetch("name")} (`#{token}`)"
+              report.puts
+              report.puts "- Type: #{type}"
+              report.puts "- Homebrew token: **#{status}**"
+              report.puts "- Documentation: #{package.fetch("docs")}"
+              report.puts "- Livecheck: `#{livecheck.empty? ? "no result" : livecheck.gsub("`", "'")}`"
+              report.puts
+            end
+          end
+          RUBY
+
+      - name: Create or update maintenance issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Automated monthly package freshness report"
+          issue_number="$(gh issue list --state open --search "$title in:title" --json number,title --jq '.[] | select(.title == "'"$title"'") | .number' | head -n1)"
+          if [[ -n "$issue_number" ]]; then
+            gh issue edit "$issue_number" --body-file freshness-report.md
+            gh issue comment "$issue_number" --body "Report refreshed by workflow run $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID."
+          else
+            gh issue create --title "$title" --body-file freshness-report.md
+          fi
+
+      - name: Upload report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: package-freshness-report
+          path: freshness-report.md
+          retention-days: 90

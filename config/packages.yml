@@ -1,0 +1,188 @@
+# Source of truth for automated package validation.
+#
+# This catalog does not pin Homebrew versions. Homebrew is a rolling package
+# manager; the workflows verify that tokens resolve, installs succeed, expected
+# commands/apps exist, and upstream projects remain current.
+
+packages:
+  - token: git
+    type: formula
+    group: foundation
+    command: git
+    name: Git
+    docs: https://git-scm.com/docs/git
+
+  - token: gh
+    type: formula
+    group: foundation
+    command: gh
+    name: GitHub CLI
+    docs: https://cli.github.com/manual/
+
+  - token: mise
+    type: formula
+    group: foundation
+    command: mise
+    name: mise
+    docs: https://mise.jdx.dev/
+
+  - token: uv
+    type: formula
+    group: foundation
+    command: uv
+    name: uv
+    docs: https://docs.astral.sh/uv/
+
+  - token: bat
+    type: formula
+    group: cli
+    command: bat
+    name: bat
+    docs: https://github.com/sharkdp/bat#readme
+
+  - token: fd
+    type: formula
+    group: cli
+    command: fd
+    name: fd
+    docs: https://github.com/sharkdp/fd#readme
+
+  - token: fzf
+    type: formula
+    group: cli
+    command: fzf
+    name: fzf
+    docs: https://github.com/junegunn/fzf#readme
+
+  - token: jq
+    type: formula
+    group: cli
+    command: jq
+    name: jq
+    docs: https://jqlang.org/manual/
+
+  - token: ripgrep
+    type: formula
+    group: cli
+    command: rg
+    name: ripgrep
+    docs: https://github.com/BurntSushi/ripgrep#readme
+
+  - token: shellcheck
+    type: formula
+    group: cli
+    command: shellcheck
+    name: ShellCheck
+    docs: https://www.shellcheck.net/
+
+  - token: shfmt
+    type: formula
+    group: cli
+    command: shfmt
+    name: shfmt
+    docs: https://github.com/mvdan/sh#shfmt
+
+  - token: tree
+    type: formula
+    group: cli
+    command: tree
+    name: tree
+    docs: https://formulae.brew.sh/formula/tree
+
+  - token: 1password
+    type: cask
+    group: apps
+    app: 1Password.app
+    name: 1Password
+    docs: https://support.1password.com/
+
+  - token: bitwarden
+    type: cask
+    group: apps
+    app: Bitwarden.app
+    name: Bitwarden
+    docs: https://bitwarden.com/help/
+
+  - token: firefox
+    type: cask
+    group: apps
+    app: Firefox.app
+    name: Firefox
+    docs: https://support.mozilla.org/products/firefox
+
+  - token: visual-studio-code
+    type: cask
+    group: apps
+    app: Visual Studio Code.app
+    name: Visual Studio Code
+    docs: https://code.visualstudio.com/docs
+
+  - token: zed
+    type: cask
+    group: apps
+    app: Zed.app
+    name: Zed
+    docs: https://zed.dev/docs
+
+  - token: ghostty
+    type: cask
+    group: apps
+    app: Ghostty.app
+    name: Ghostty
+    docs: https://ghostty.org/docs
+
+  - token: iterm2
+    type: cask
+    group: apps
+    app: iTerm.app
+    name: iTerm2
+    docs: https://iterm2.com/documentation.html
+
+  - token: docker-desktop
+    type: cask
+    group: apps
+    app: Docker.app
+    name: Docker Desktop
+    docs: https://docs.docker.com/desktop/setup/install/mac-install/
+
+  - token: orbstack
+    type: cask
+    group: apps
+    app: OrbStack.app
+    name: OrbStack
+    docs: https://docs.orbstack.dev/
+
+  - token: podman-desktop
+    type: cask
+    group: apps
+    app: Podman Desktop.app
+    name: Podman Desktop
+    docs: https://podman-desktop.io/docs/installation/macos-install
+
+  - token: rectangle
+    type: cask
+    group: apps
+    app: Rectangle.app
+    name: Rectangle
+    docs: https://github.com/rxhanson/Rectangle#readme
+
+  - token: raycast
+    type: cask
+    group: apps
+    app: Raycast.app
+    name: Raycast
+    docs: https://manual.raycast.com/
+
+  - token: chezmoi
+    type: formula
+    group: apps
+    command: chezmoi
+    name: chezmoi
+    docs: https://www.chezmoi.io/user-guide/command-overview/
+
+  - token: mas
+    type: formula
+    group: apps
+    command: mas
+    name: mas
+    docs: https://github.com/mas-cli/mas#readme

@@ -30,7 +30,8 @@ A new Mac should be prepared in this order:
 5. Clone this repository and run the read-only audit.
 6. Bootstrap the small developer foundation.
 7. Configure GitHub authentication and project-specific runtimes.
-8. Add applications only after reviewing their permissions, update model, and license.
+8. Review Finder, pointer, keyboard, Dock, and window ergonomics.
+9. Add applications only after reviewing their permissions, update model, and license.
 
 The first three steps remain manual by design. Start with:
 
@@ -104,34 +105,62 @@ The bootstrap uses Homebrew's supported default prefix for the current architect
 
 See [Bootstrap and package management](docs/02-bootstrap.md) for every flag and trust boundary.
 
+## Explore more tools without installing everything
+
+The baseline and `Brewfile.cli` are deliberately small. The [researched tool and application catalog](docs/tool-catalog.md) covers many current alternatives, including:
+
+- Chrome, Firefox, Brave, Edge, Vivaldi, Orion, Arc, and DuckDuckGo;
+- Ghostty, iTerm2, cmux, Warp, WezTerm, kitty, and Tabby;
+- VS Code, Cursor, Zed, Windsurf, Sublime Text, Nova, BBEdit, JetBrains, Neovim, and Helix;
+- Claude Code, Codex, OpenCode, Aider, and multi-agent workspaces;
+- Docker Desktop, OrbStack, Podman, Rancher Desktop, Colima, UTM, Parallels, and VMware Fusion;
+- API clients, database clients, Git GUIs, window managers, launchers, input tools, display tools, password managers, and system utilities.
+
+Each entry explains the recurring use case, Homebrew declaration, alternatives, and important permission, data, licensing, or overlap considerations. Inclusion means “worth evaluating,” not “install by default.”
+
+For optional formulae, AI agents, cloud tools, and role-specific developer utilities:
+
+```bash
+cp Brewfile.extras.example Brewfile.local
+${EDITOR:-nano} Brewfile.local
+brew bundle check --file=Brewfile.local --no-upgrade
+brew bundle install --file=Brewfile.local --no-upgrade
+```
+
+`Brewfile.local` is ignored by Git. Uncomment only tools that solve an actual recurring problem.
+
 ## Add applications deliberately
 
-No graphical applications are installed by default. Copy the example, uncomment only the applications chosen for this Mac, and inspect the result:
+No graphical applications are installed by default. [`Brewfile.apps.example`](Brewfile.apps.example) now contains a broad commented menu rather than a tiny implied shortlist.
 
 ```bash
 cp Brewfile.apps.example Brewfile.apps
 ${EDITOR:-nano} Brewfile.apps
 cat Brewfile.apps
-./scripts/bootstrap.sh --apps Brewfile.apps
+brew bundle check --file=Brewfile.apps --no-upgrade
+brew bundle install --file=Brewfile.apps --no-upgrade
 ```
 
-The example groups alternatives so competing tools are not silently installed together.
+The example groups competing tools so they are not silently installed together. Start with the built-in macOS option, then choose one or none per responsibility. See the [tool catalog](docs/tool-catalog.md) and [Applications and preferences](docs/05-apps-and-preferences.md).
 
-| Category | Options | What they are for |
-| --- | --- | --- |
-| Password manager | [1Password](https://support.1password.com/), [Bitwarden](https://bitwarden.com/help/) | Store credentials, passkeys, secure notes, and recovery material outside this repository. Choose one. |
-| Browser | [Firefox](https://support.mozilla.org/products/firefox) | Adds a second browser for compatibility testing, profile separation, or personal preference. Safari is already installed. |
-| Editor | [Visual Studio Code](https://code.visualstudio.com/docs), [Zed](https://zed.dev/docs) | Edit code and integrate language tooling. Choose the editor that fits the projects and team. |
-| Terminal | [Ghostty](https://ghostty.org/docs), [iTerm2](https://iterm2.com/documentation.html) | Replace Terminal.app when their rendering, profiles, panes, or automation are genuinely useful. |
-| Containers | [Docker Desktop](https://docs.docker.com/desktop/setup/install/mac-install/), [OrbStack](https://docs.orbstack.dev/), [Podman Desktop](https://podman-desktop.io/docs/installation/macos-install) | Run Linux containers and related development environments. Check licensing, architecture support, and team compatibility before choosing one. |
-| Window management and launcher | [Rectangle](https://github.com/rxhanson/Rectangle#readme), [Raycast](https://manual.raycast.com/) | Add keyboard-driven window layouts or launcher automation; both may request meaningful macOS permissions. |
-| Configuration management | [chezmoi](https://www.chezmoi.io/user-guide/command-overview/), [`mas`](https://github.com/mas-cli/mas#readme) | Manage dotfiles across machines or install Mac App Store applications from the command line. Neither is enabled by default. |
+## Customize Finder and ergonomics
 
-See [Applications and preferences](docs/05-apps-and-preferences.md) for the selection criteria and permission review process.
+Package installation is only part of a usable Mac. The [macOS ergonomics and Finder guide](docs/macos-ergonomics.md) walks through supported settings for:
 
-## Optional macOS preferences
+- making List view the normal Finder view and applying it as a default;
+- Finder columns, sorting, sidebar, search scope, filename extensions, path bar, and status bar;
+- faster mouse or trackpad tracking and the current pointer-acceleration toggle;
+- scrolling speed, secondary click, Tap to Click, and Three Finger Drag;
+- key repeat, delay, keyboard navigation, and shortcut conflicts;
+- Dock behavior, current built-in window tiling, Mission Control, and Hot Corners;
+- screenshot location, display comfort, notifications, Focus, and login items;
+- deciding when tools such as LinearMouse, Mos, Rectangle, BetterTouchTool, BetterDisplay, or Lunar are justified.
 
-The preferences script changes only four narrow, documented settings:
+Finder List view and pointer speed remain manual because the correct behavior depends on the user, mouse, trackpad, display, and accessibility needs. The guide uses supported Finder and System Settings controls instead of undocumented preference commands copied from old articles.
+
+## Optional narrow macOS preferences
+
+The preference script changes only four narrow, documented settings:
 
 - show filename extensions;
 - show Finder's path bar;
@@ -150,7 +179,7 @@ Apply them explicitly:
 ./scripts/macos-defaults.sh --apply
 ```
 
-The script records the previous values before applying changes. It never disables Gatekeeper, System Integrity Protection, quarantine, the firewall, automatic updates, or other security controls.
+The script records the previous values before applying changes. It never disables Gatekeeper, System Integrity Protection, quarantine, the firewall, automatic updates, or other security controls. It intentionally does not set Finder List view, mouse speed, acceleration, key repeat, Dock behavior, trackpad gestures, or display scaling.
 
 ## Verify the result
 
@@ -175,6 +204,8 @@ Every repository guide is linked here so the README remains the entry point.
 | Identity, authentication, SSH, and commit signing | [Git and GitHub](docs/03-git-and-github.md) |
 | Python with `uv`; other runtimes with `mise` | [Runtimes](docs/04-runtimes.md) |
 | Choosing apps and applying narrow preferences | [Apps and preferences](docs/05-apps-and-preferences.md) |
+| Finder, mouse, trackpad, keyboard, Dock, and windows | [macOS ergonomics](docs/macos-ergonomics.md) |
+| Broad researched choices with tradeoffs | [Tool and application catalog](docs/tool-catalog.md) |
 | Updates, drift review, and recurring checks | [Maintenance](docs/06-maintenance.md) |
 | Clean setup versus migration | [Migration](docs/migration.md) |
 | Why the repository is structured this way | [Design principles](docs/design-principles.md) |
@@ -196,6 +227,8 @@ It will not:
 - write Git identity, email addresses, tokens, or cloud credentials;
 - grant Accessibility, Full Disk Access, Screen Recording, or other privacy permissions;
 - globally install Python packages with `sudo pip`, or globally install every language runtime;
+- install every plausible browser, terminal, editor, AI agent, container engine, or utility;
+- force personal pointer, keyboard, window, Dock, display, or accessibility preferences;
 - remove software merely because it is absent from a Brewfile;
 - promise bit-for-bit reproducibility from Homebrew, which is a rolling package manager rather than a lockfile system.
 
@@ -204,10 +237,11 @@ It will not:
 Change one layer at a time:
 
 1. Add or remove package declarations in a Brewfile.
-2. Review the diff.
-3. Run `brew bundle check --no-upgrade`.
-4. Apply with `brew bundle install --no-upgrade`.
-5. Commit the rationale, not only the package name.
+2. Read the linked vendor and Homebrew documentation.
+3. Review the diff and competing owners for the same responsibility.
+4. Run `brew bundle check --no-upgrade` against the selected file.
+5. Apply with `brew bundle install --no-upgrade`.
+6. Commit the rationale, not only the package name.
 
 Project runtime versions belong in each project's `mise.toml`, `.tool-versions`, `.python-version`, or equivalent lock/configuration files. The new-Mac repository should not become a hidden source of project requirements.
 

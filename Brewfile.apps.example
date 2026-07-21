@@ -1,37 +1,154 @@
-# Copy this file to Brewfile.apps, then uncomment only selected applications.
-# Install the reviewed file with:
-#   ./scripts/bootstrap.sh --apps Brewfile.apps
+# Reviewed graphical application choices.
 #
-# Homebrew casks install vendor applications and have a different trust model
-# from Homebrew formulae. Review the vendor, license, permissions, and update
-# channel before uncommenting a line.
+# Nothing in this file is installed by default. Copy it to Brewfile.apps,
+# uncomment only selected applications, and inspect the result:
+#
+#   cp Brewfile.apps.example Brewfile.apps
+#   ${EDITOR:-nano} Brewfile.apps
+#   brew bundle check --file=Brewfile.apps --no-upgrade
+#   brew bundle install --file=Brewfile.apps --no-upgrade
+#
+# Read docs/tool-catalog.md for use cases, alternatives, trust boundaries, and
+# official documentation. Homebrew casks install vendor applications and may
+# run vendor installers. Recheck the publisher, license, permissions, system
+# requirements, update channel, and removal path before uncommenting a line.
 
-# Password manager — choose one.
-# cask "1password"
-# cask "bitwarden"
+# Password manager — Apple Passwords is built in; otherwise choose one.
+# cask "1password" # Cross-platform vaults, passkeys, sharing, and developer tools.
+# cask "bitwarden" # Cross-platform vault with Bitwarden's hosted/self-hosted model.
+# cask "keepassxc" # Local database file; you own synchronization and recovery.
 
-# Browser — Safari is already present; add another only when needed.
-# cask "firefox"
+# Browser — Safari is built in. Add only the engines, profiles, or integrations
+# actually needed. A web developer commonly tests Safari, Chrome, and Firefox.
+# cask "google-chrome"  # Chromium compatibility, extensions, and Google workflows.
+# cask "firefox"        # Firefox engine, profiles, extensions, and testing.
+# cask "brave-browser"  # Chromium browser with privacy-focused defaults.
+# cask "microsoft-edge" # Microsoft 365/Entra workflows or Edge-specific testing.
+# cask "vivaldi"        # Highly configurable browser with built-in productivity tools.
+# cask "orion"          # Mac-focused WebKit browser.
+# cask "arc"            # Chromium browser with a workspace-oriented tab model.
+# cask "duckduckgo"     # Privacy-focused desktop browser with a simpler feature set.
 
-# Editor — choose one or keep the editor already used by the team.
-# cask "visual-studio-code"
-# cask "zed"
+# Primary editor or IDE — choose one first; add a second only for a named need.
+# cask "visual-studio-code" # Broad extension and language ecosystem.
+# cask "cursor"             # AI-centered editor; review code/data and account policy.
+# cask "zed"                # Fast collaborative editor with a modern native workflow.
+# cask "windsurf"           # AI-centered editor; review code/data and account policy.
+# cask "sublime-text"       # Fast focused editor for code, markup, and large files.
+# cask "nova"               # Native Mac editor from Panic.
+# cask "bbedit"             # Native text, code, markup, and transformation tools.
+# cask "jetbrains-toolbox"  # Manager for IntelliJ, WebStorm, PyCharm, GoLand, and more.
+# cask "android-studio"     # Android IDE, SDK manager, and emulator tooling.
+# Xcode is installed from the App Store or Apple Developer downloads.
 
-# Terminal — Terminal.app is sufficient for the bootstrap.
-# cask "ghostty"
-# cask "iterm2"
+# Terminal or agent workspace — Terminal.app is enough for bootstrap. Choose one
+# alternative when rendering, panes, remote work, automation, or agents justify it.
+# cask "ghostty" # Native macOS UI and GPU-accelerated terminal rendering.
+# cask "iterm2"  # Mature profiles, panes, triggers, and automation.
+# cask "cmux"    # Ghostty-based workspaces and notifications for coding agents.
+# cask "warp"    # Block-oriented terminal with integrated collaborative/AI features.
+# cask "wezterm" # Cross-platform terminal and multiplexer configured with Lua.
+# cask "kitty"   # Keyboard-driven GPU terminal with scriptable remote control.
+# cask "tabby"   # Terminal, SSH, and serial client in one cross-platform app.
 
-# Containers — choose one platform after checking licensing and team needs.
-# cask "docker-desktop"
-# cask "orbstack"
-# cask "podman-desktop"
+# Container desktop — choose one primary owner. Do not run several engines merely
+# because they appear here.
+# cask "docker-desktop" # Team-standard Docker desktop, integrations, and support.
+# cask "orbstack"       # Mac-focused Docker and Linux-machine workflow.
+# cask "podman-desktop" # Podman container and image management.
+# cask "rancher"        # Desktop Kubernetes plus container-engine choices.
 
-# Window management / launcher — both require meaningful permissions.
-# cask "rectangle"
-# cask "raycast"
+# General virtual machines — choose based on guest, licensing, and team needs.
+# cask "utm"           # Native QEMU-based virtual machine interface.
+# cask "parallels"     # Commercial polished desktop virtualization.
+# cask "vmware-fusion" # VMware-compatible desktop virtualization.
 
-# Dotfile management is useful once configuration grows.
-# brew "chezmoi"
+# API client — choose one graphical client when curl/xh/HTTPie are insufficient.
+# cask "bruno"    # File-based API collections that fit Git workflows.
+# cask "postman"  # Team collections, workspaces, mocks, and collaboration.
+# cask "insomnia" # HTTP and GraphQL client.
+# cask "yaak"     # REST, GraphQL, and gRPC client.
 
-# Mac App Store automation is intentionally not enabled by default.
+# Database client — match the actual engines and authentication workflow.
+# cask "tableplus"             # Native multi-database client.
+# cask "dbeaver-community"     # Broad JDBC and database coverage.
+# cask "beekeeper-studio"      # Cross-platform SQL editor and database manager.
+# cask "datagrip"              # JetBrains database and SQL IDE.
+# cask "postico"               # Native PostgreSQL-focused client.
+# cask "sequel-ace"            # Focused MySQL and MariaDB client.
+# cask "db-browser-for-sqlite" # Local SQLite browsing and editing.
+# cask "mongodb-compass"       # MongoDB-specific GUI.
+# cask "redis-insight"         # Redis data, metrics, and command GUI.
+# cask "dbgate"                # Open-source SQL and selected NoSQL manager.
+
+# Graphical Git client — the Git CLI remains the common denominator.
+# cask "github"        # GitHub Desktop: simple GitHub-oriented workflow.
+# cask "fork"          # Focused graphical Git history and operations.
+# cask "tower"         # Polished commercial Git client.
+# cask "sublime-merge" # Fast graphical Git client from Sublime.
+# cask "gitkraken"     # Visual branch topology and collaboration ecosystem.
+# cask "gitbutler"     # Emerging simultaneous-branch workflow.
+
+# Window management — current macOS has built-in tiling. Add one manager only for
+# missing layouts, repeatability, keyboard behavior, or automation.
+# cask "rectangle"  # Straightforward keyboard movement and snap areas.
+# cask "loop"       # Visual radial controls and custom layouts.
+# cask "moom"       # Mature commercial layouts and window controls.
+# cask "aerospace"  # Keyboard-first tiling window manager.
+
+# Launcher and automation — Spotlight and Shortcuts are built in.
+# cask "raycast"         # Launcher, snippets, clipboard, quick links, and extensions.
+# cask "alfred"          # Mature launcher with local workflows and optional Powerpack.
+# cask "hammerspoon"     # Lua-driven macOS automation; broad Accessibility access.
+# cask "bettertouchtool" # Gestures, input devices, window actions, and automation.
+
+# Mouse and trackpad enhancement — try supported macOS settings first. Choose one
+# owner for pointer/scroll behavior to avoid conflicts.
+# cask "linearmouse" # Per-device pointer acceleration, speed, scrolling, and buttons.
+# cask "mos"         # Smooth scrolling and separate mouse/trackpad scroll direction.
+# cask "steermouse"  # Deep third-party mouse buttons, wheels, chords, and cursor speed.
+# cask "bettermouse" # Third-party mouse acceleration, scrolling, and button features.
+# cask "karabiner-elements" # Advanced low-level keyboard remapping.
+
+# External-display enhancement — use only when Displays settings are insufficient.
+# cask "betterdisplay" # Scaling, virtual displays, brightness, and display overrides.
+# cask "lunar"         # Adaptive brightness and external monitor control.
+
+# System visibility and storage — avoid vague automatic “optimizer” applications.
+# cask "stats"            # Open-source menu-bar system monitor.
+# cask "istat-menus"      # Commercial system monitor and history.
+# cask "maccy"            # Lightweight clipboard history; configure sensitive-data rules.
+# cask "appcleaner"       # Review related files while uninstalling an application.
+# cask "pearcleaner"      # Open-source uninstaller and leftover-file review.
+# cask "grandperspective" # Visual disk-usage map.
+
+# Network and security utilities — add only as part of an explicit access or
+# monitoring model.
+# cask "tailscale"    # Identity-aware mesh networking.
+# cask "wireguard"    # WireGuard client for configurations from a trusted owner.
+# cask "lulu"         # Open-source outbound connection firewall.
+# cask "little-snitch" # Commercial outbound network monitor and rule system.
+
+# Notes and knowledge — normally personal or team-specific.
+# cask "obsidian" # Local Markdown knowledge base with plugins.
+# cask "notion"   # Collaborative documents, planning, and team workspaces.
+
+# Communication — normally belongs in a work-specific overlay.
+# cask "slack"
+# cask "zoom"
+# cask "microsoft-teams"
+# cask "discord"
+
+# File transfer — protect bookmarks, credentials, private keys, and sync actions.
+# cask "cyberduck" # Graphical SFTP and cloud-object transfers.
+# cask "transmit"  # Commercial native Mac transfer client.
+# cask "forklift"  # Dual-pane file manager with remote connections.
+
+# Fonts — install only when an editor, terminal, or prompt needs them.
+# cask "font-jetbrains-mono-nerd-font"
+# cask "font-fira-code"
+# cask "font-iosevka-nerd-font"
+
+# Mac App Store automation is intentionally not enabled by default. Account,
+# region, ownership, and numeric app identifiers make public automation brittle.
 # brew "mas"

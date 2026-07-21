@@ -59,9 +59,10 @@
 # cask "rancher"        # Desktop Kubernetes plus container-engine choices.
 
 # General virtual machines — choose based on guest, licensing, and team needs.
-# cask "utm"           # Native QEMU-based virtual machine interface.
-# cask "parallels"     # Commercial polished desktop virtualization.
-# cask "vmware-fusion" # VMware-compatible desktop virtualization.
+# cask "utm"       # Native QEMU-based virtual machine interface.
+# cask "parallels" # Commercial polished desktop virtualization.
+# VMware Fusion remains an option to research, but Homebrew currently marks its
+# cask disabled, so this reviewed copy-paste template does not include it.
 
 # API client — choose one graphical client when curl/xh/HTTPie are insufficient.
 # cask "bruno"    # File-based API collections that fit Git workflows.
@@ -91,10 +92,11 @@
 
 # Window management — current macOS has built-in tiling. Add one manager only for
 # missing layouts, repeatability, keyboard behavior, or automation.
-# cask "rectangle"  # Straightforward keyboard movement and snap areas.
-# cask "loop"       # Visual radial controls and custom layouts.
-# cask "moom"       # Mature commercial layouts and window controls.
-# cask "aerospace"  # Keyboard-first tiling window manager.
+# cask "rectangle" # Straightforward keyboard movement and snap areas.
+# cask "loop"      # Visual radial controls and custom layouts.
+# cask "moom"      # Mature commercial layouts and window controls.
+# AeroSpace currently uses a non-official Homebrew tap and is not notarized.
+# It is documented in the catalog but intentionally omitted from this template.
 
 # Launcher and automation — Spotlight and Shortcuts are built in.
 # cask "raycast"         # Launcher, snippets, clipboard, quick links, and extensions.
@@ -124,10 +126,12 @@
 
 # Network and security utilities — add only as part of an explicit access or
 # monitoring model.
-# cask "tailscale"    # Identity-aware mesh networking.
-# cask "wireguard"    # WireGuard client for configurations from a trusted owner.
-# cask "lulu"         # Open-source outbound connection firewall.
+# cask "tailscale-app" # Identity-aware mesh networking; current macOS app token.
+# cask "passepartout"  # OpenVPN/WireGuard client; configuration ownership still matters.
+# cask "lulu"          # Open-source outbound connection firewall.
 # cask "little-snitch" # Commercial outbound network monitor and rule system.
+# The official WireGuard GUI is distributed through the Mac App Store. The
+# command-line tools are available as brew "wireguard-tools" in the local overlay.
 
 # Notes and knowledge — normally personal or team-specific.
 # cask "obsidian" # Local Markdown knowledge base with plugins.

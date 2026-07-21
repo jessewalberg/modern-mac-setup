@@ -2,7 +2,7 @@
 
 These sources informed the repository's current behavior. They are intentionally dominated by platform and tool owners rather than copied setup recipes.
 
-**Reviewed:** July 20, 2026
+**Reviewed:** July 21, 2026
 
 ## Apple
 
@@ -25,6 +25,7 @@ These sources informed the repository's current behavior. They are intentionally
 
 ## Git and GitHub
 
+- [Git reference](https://git-scm.com/docs/git)
 - [Install Git](https://github.com/git-guides/install-git)
 - [GitHub CLI manual](https://cli.github.com/manual/)
 - [`gh auth login`](https://cli.github.com/manual/gh_auth_login)
@@ -38,6 +39,34 @@ These sources informed the repository's current behavior. They are intentionally
 - [uv documentation](https://docs.astral.sh/uv/)
 - [Installing uv](https://docs.astral.sh/uv/getting-started/installation/)
 - [uv tool environments](https://docs.astral.sh/uv/concepts/tools/)
+
+## Optional command-line tools
+
+- [bat](https://github.com/sharkdp/bat#readme)
+- [fd](https://github.com/sharkdp/fd#readme)
+- [fzf](https://github.com/junegunn/fzf#readme)
+- [jq manual](https://jqlang.org/manual/)
+- [ripgrep (`rg`)](https://github.com/BurntSushi/ripgrep#readme)
+- [ShellCheck](https://www.shellcheck.net/)
+- [shfmt](https://github.com/mvdan/sh#shfmt)
+- [`tree` Homebrew formula](https://formulae.brew.sh/formula/tree)
+
+## Optional applications
+
+- [1Password support](https://support.1password.com/)
+- [Bitwarden help](https://bitwarden.com/help/)
+- [Firefox support](https://support.mozilla.org/products/firefox)
+- [Visual Studio Code documentation](https://code.visualstudio.com/docs)
+- [Zed documentation](https://zed.dev/docs)
+- [Ghostty documentation](https://ghostty.org/docs)
+- [iTerm2 documentation](https://iterm2.com/documentation.html)
+- [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
+- [OrbStack documentation](https://docs.orbstack.dev/)
+- [Podman Desktop for macOS](https://podman-desktop.io/docs/installation/macos-install)
+- [Rectangle](https://github.com/rxhanson/Rectangle#readme)
+- [Raycast manual](https://manual.raycast.com/)
+- [chezmoi command overview](https://www.chezmoi.io/user-guide/command-overview/)
+- [`mas`](https://github.com/mas-cli/mas#readme)
 
 ## Repository automation
 

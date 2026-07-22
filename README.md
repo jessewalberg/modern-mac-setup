@@ -75,9 +75,9 @@ ${EDITOR:-nano} Brewfile.apps
 ./scripts/bootstrap.sh --apps Brewfile.apps
 ```
 
-The example contains commented choices for password managers, browsers, Discord or Slack, editors, coding agents, terminal workspaces such as cmux, containers, launchers, and window managers. Uncomment one option only when it solves a real need.
+The example contains commented choices for password managers, browsers, communication, screenshots, databases and database clients, API clients, editors, coding agents, terminal workspaces, containers, launchers, and window managers. Uncomment an option only when it solves a real need.
 
-A browser is enough for occasional community access. Start with one editor or coding agent, learn its permissions and data model, and add another only for a distinct workflow.
+Keep database engines project-scoped or containerized when practical; install a desktop client independently when all you need is access to a remote database or API.
 
 ## Configure identity and project runtimes
 

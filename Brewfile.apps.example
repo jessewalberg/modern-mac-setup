@@ -13,6 +13,12 @@
 # Browser — Safari is already present; add another only when needed.
 # cask "firefox"
 
+# Communication and community — the browser is enough for occasional access.
+# Desktop clients add notifications, background activity, local caches, account
+# sessions, and another update channel. Install only what you use regularly.
+# cask "discord"
+# cask "slack"
+
 # Editor or visual agent workspace — choose one, or keep your current editor.
 # cask "visual-studio-code"
 # cask "zed"
@@ -33,9 +39,11 @@
 # isolated Python environment; install it with uv as described in
 # docs/07-ai-coding-tools.md.
 
-# Terminal — Terminal.app is sufficient for the bootstrap.
-# cask "ghostty"
-# cask "iterm2"
+# Terminal workspace — Terminal.app is sufficient for bootstrap. Choose a
+# replacement only when its workflow earns the extra application and updates.
+# cask "cmux"     # native macOS workspace for terminals, agents, and browser panes
+# cask "ghostty"  # focused standalone terminal
+# cask "iterm2"   # mature terminal with extensive profiles and integrations
 
 # Containers — choose one platform after checking licensing and team needs.
 # cask "docker-desktop"

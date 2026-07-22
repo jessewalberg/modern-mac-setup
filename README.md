@@ -7,7 +7,7 @@ A practical, security-conscious path from a new Mac to a small developer setup.
 **Supports:** macOS 14 or newer; Apple silicon first, with native Intel support while Homebrew supports it.  
 **Last human review:** July 22, 2026
 
-This guide keeps the default install small. Applications, shell changes, and macOS preferences are opt-in.
+This guide keeps the default install small. Applications, coding agents, shell changes, and macOS preferences are opt-in.
 
 > **Built to stay current:** automated checks regularly test packages and workflows, and humans review the guide after major macOS releases. Recommendations should follow current official guidance rather than preserve old commands. See the [maintenance policy](MAINTENANCE.md).
 >
@@ -70,7 +70,7 @@ The foundation installs four tools:
 
 `--with-cli` adds `bat`, `fd`, `fzf`, `jq`, `ripgrep`, `shellcheck`, `shfmt`, and `tree`. Omit that flag for the smallest install. `--configure-shell` adds a managed Homebrew and `mise` block to `~/.zshrc`.
 
-No graphical applications are installed.
+No graphical applications or AI coding agents are installed.
 
 Run `./scripts/bootstrap.sh --help` for every option and read [bootstrap details](docs/02-bootstrap.md) only when you need them.
 
@@ -82,17 +82,30 @@ ${EDITOR:-nano} Brewfile.apps
 ./scripts/bootstrap.sh --apps Brewfile.apps
 ```
 
-The example includes alternatives for password managers, browsers, editors, terminals, containers, launchers, and window managers. Uncomment only what belongs on this Mac.
+The example includes alternatives for password managers, browsers, editors, coding agents, terminals, containers, launchers, and window managers. Uncomment only what belongs on this Mac.
 
 See [applications and preferences](docs/05-apps-and-preferences.md) for permissions and selection guidance.
 
-## 5. Keep runtimes with projects
+## 5. Optionally choose an editor and coding agent
+
+No AI tool is required. Start with one agent, understand what it can read, edit, and execute, then add another only when it solves a different problem.
+
+- [ ] Keep the current editor and install no coding agent yet.
+- [ ] Choose at most one visual workspace to evaluate: Visual Studio Code, Zed, Cursor, or Google Antigravity.
+- [ ] Choose zero or one terminal agent to evaluate: Claude Code, Codex, GitHub Copilot CLI, Antigravity CLI, Cursor CLI, OpenCode, or Aider.
+- [ ] Before signing in, review account cost, code and prompt data use, workspace trust, command approval, update ownership, and any MCP servers or plugins.
+
+Homebrew-managed choices are commented in `Brewfile.apps.example`. Aider uses an isolated `uv` tool environment instead of the Brewfile.
+
+Use the [modern coding-tool decision guide](docs/07-ai-coding-tools.md) to compare the options, installation owners, current naming, and first-run safety checks.
+
+## 6. Keep runtimes with projects
 
 Use `mise` for Node, Go, Java, Ruby, Terraform, and similar tools. Use `uv` for Python. Declare versions inside each project rather than making this Mac setup repository a hidden source of project requirements.
 
 See [project runtimes](docs/04-runtimes.md) for examples.
 
-## 6. Optionally review four visible macOS preferences
+## 7. Optionally review four visible macOS preferences
 
 These choices are separate from the developer bootstrap. Choose them manually in macOS, preview the repository script, or skip them.
 
@@ -135,6 +148,7 @@ Warnings are prompts to review, not proof that the Mac is unsafe.
 
 - [New setup or migration?](docs/migration.md)
 - [Git and GitHub authentication](docs/03-git-and-github.md)
+- [Optional AI coding tools](docs/07-ai-coding-tools.md)
 - [Maintenance and updates](docs/06-maintenance.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - [Design principles](docs/design-principles.md)
@@ -142,7 +156,7 @@ Warnings are prompts to review, not proof that the Mac is unsafe.
 
 ## Guardrails
 
-The scripts do not disable macOS security controls, run Homebrew with `sudo`, install Rosetta, grant privacy permissions, write your identity or credentials, remove unrelated software, or install a large personal application stack.
+The scripts do not disable macOS security controls, run Homebrew with `sudo`, install Rosetta, grant privacy permissions, write your identity or credentials, sign in to AI providers, enable agent autonomy, remove unrelated software, or install a large personal application stack.
 
 ## Contributing
 

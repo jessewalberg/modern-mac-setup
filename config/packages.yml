@@ -50,6 +50,29 @@ packages:
   - {"token": "macshot", "type": "cask", "group": "apps", "app": "macshot.app", "name": "macshot", "docs": "https://github.com/sw33tLie/macshot"}
   - {"token": "opensuperwhisper", "type": "cask", "group": "apps", "app": "OpenSuperWhisper.app", "name": "OpenSuperWhisper", "docs": "https://github.com/starmel/OpenSuperWhisper"}
   - {"token": "maccy", "type": "cask", "group": "apps", "app": "Maccy.app", "name": "Maccy", "docs": "https://maccy.app/"}
+  - {"token": "postgresql@18", "type": "formula", "group": "apps", "command": "psql", "name": "PostgreSQL 18", "docs": "https://www.postgresql.org/"}
+  - {"token": "sqlite", "type": "formula", "group": "apps", "command": "sqlite3", "name": "SQLite CLI", "docs": "https://sqlite.org/"}
+  - {"token": "mysql", "type": "formula", "group": "apps", "command": "mysql", "name": "MySQL", "docs": "https://dev.mysql.com/doc/"}
+  - {"token": "mariadb", "type": "formula", "group": "apps", "command": "mariadb", "name": "MariaDB", "docs": "https://mariadb.org/"}
+  - {"token": "duckdb", "type": "formula", "group": "apps", "command": "duckdb", "name": "DuckDB", "docs": "https://duckdb.org/docs/"}
+  - {"token": "valkey", "type": "formula", "group": "apps", "command": "valkey-server", "name": "Valkey", "docs": "https://valkey.io/"}
+  - {"token": "redis", "type": "formula", "group": "apps", "command": "redis-server", "name": "Redis", "docs": "https://redis.io/docs/latest/"}
+  - {"token": "mongosh", "type": "formula", "group": "apps", "command": "mongosh", "name": "MongoDB Shell", "docs": "https://www.mongodb.com/docs/mongodb-shell/"}
+  - {"token": "dbeaver-community", "type": "cask", "group": "apps", "app": "DBeaver.app", "name": "DBeaver Community", "docs": "https://dbeaver.io/"}
+  - {"token": "beekeeper-studio", "type": "cask", "group": "apps", "app": "Beekeeper Studio.app", "name": "Beekeeper Studio", "docs": "https://www.beekeeperstudio.io/"}
+  - {"token": "dbgate", "type": "cask", "group": "apps", "app": "DbGate.app", "name": "DbGate", "docs": "https://dbgate.org/"}
+  - {"token": "tableplus", "type": "cask", "group": "apps", "app": "TablePlus.app", "name": "TablePlus", "docs": "https://tableplus.com/"}
+  - {"token": "datagrip", "type": "cask", "group": "apps", "app": "DataGrip.app", "name": "DataGrip", "docs": "https://www.jetbrains.com/datagrip/"}
+  - {"token": "pgadmin4", "type": "cask", "group": "apps", "app": "pgAdmin 4.app", "name": "pgAdmin 4", "docs": "https://www.pgadmin.org/"}
+  - {"token": "mongodb-compass", "type": "cask", "group": "apps", "app": "MongoDB Compass.app", "name": "MongoDB Compass", "docs": "https://www.mongodb.com/products/compass"}
+  - {"token": "db-browser-for-sqlite", "type": "cask", "group": "apps", "app": "DB Browser for SQLite.app", "name": "DB Browser for SQLite", "docs": "https://sqlitebrowser.org/"}
+  - {"token": "redis-insight", "type": "cask", "group": "apps", "app": "Redis Insight.app", "name": "Redis Insight", "docs": "https://redis.io/insight/"}
+  - {"token": "postman", "type": "cask", "group": "apps", "app": "Postman.app", "name": "Postman", "docs": "https://www.postman.com/"}
+  - {"token": "insomnia", "type": "cask", "group": "apps", "app": "Insomnia.app", "name": "Insomnia", "docs": "https://insomnia.rest/"}
+  - {"token": "bruno", "type": "cask", "group": "apps", "app": "Bruno.app", "name": "Bruno", "docs": "https://www.usebruno.com/"}
+  - {"token": "yaak", "type": "cask", "group": "apps", "app": "yaak.app", "name": "Yaak", "docs": "https://yaak.app/"}
+  - {"token": "hoppscotch", "type": "cask", "group": "apps", "app": "Hoppscotch.app", "name": "Hoppscotch", "docs": "https://hoppscotch.com/"}
+  - {"token": "httpie-desktop", "type": "cask", "group": "apps", "app": "HTTPie.app", "name": "HTTPie for Desktop", "docs": "https://httpie.io/product"}
   - {"token": "visual-studio-code", "type": "cask", "group": "apps", "app": "Visual Studio Code.app", "name": "Visual Studio Code", "docs": "https://code.visualstudio.com/docs"}
   - {"token": "zed", "type": "cask", "group": "apps", "app": "Zed.app", "name": "Zed", "docs": "https://zed.dev/docs"}
   - {"token": "cursor", "type": "cask", "group": "apps", "app": "Cursor.app", "name": "Cursor", "docs": "https://cursor.com/docs"}

@@ -63,6 +63,41 @@
 # Clipboard history can retain passwords, tokens, and other copied secrets.
 # cask "maccy"  # open-source clipboard manager; configure exclusions carefully
 
+# Local databases are stateful. Prefer project containers for disposable data,
+# and install only the engines required by active projects.
+# brew "postgresql@18"  # PostgreSQL server and psql; versioned and keg-only
+# brew "sqlite"         # newer sqlite3 than macOS provides; keg-only
+# brew "mysql"
+# brew "mariadb"        # conflicts with MySQL; choose one
+# brew "duckdb"         # embedded analytical SQL database
+# brew "valkey"         # open-source Redis-compatible server
+# brew "redis"          # use when a project specifically requires Redis
+# brew "mongosh"        # MongoDB shell/client only
+#
+# MongoDB Server is not in Homebrew core. Prefer a project container or review
+# MongoDB's official vendor tap separately instead of hiding a tap in this file.
+
+# Database clients — start with one broad client, then add a specialized client
+# only when it provides a feature the broad client does not.
+# cask "dbeaver-community"       # broad open-source SQL client
+# cask "beekeeper-studio"        # approachable cross-database SQL client
+# cask "dbgate"                  # open-source SQL and MongoDB client
+# cask "tableplus"               # native commercial multi-database client
+# cask "datagrip"                # JetBrains commercial database IDE
+# cask "pgadmin4"                # PostgreSQL-specific administration
+# cask "mongodb-compass"         # MongoDB-specific GUI
+# cask "db-browser-for-sqlite"   # SQLite-specific GUI
+# cask "redis-insight"           # Redis and Valkey GUI
+
+# API clients — choose one. Collections and environments may contain secrets,
+# tokens, cookies, production URLs, and request history.
+# cask "postman"
+# cask "insomnia"
+# cask "bruno"          # open source; file-based, Git-friendly collections
+# cask "yaak"           # REST, GraphQL, and gRPC
+# cask "hoppscotch"     # open-source API development client
+# cask "httpie-desktop" # REST, GraphQL, and HTTP desktop client
+
 # Editor or visual agent workspace — choose one, or keep your current editor.
 # cask "visual-studio-code"
 # cask "zed"

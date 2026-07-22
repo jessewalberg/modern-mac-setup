@@ -124,6 +124,13 @@ packages:
     name: Slack
     docs: https://slack.com/help
 
+  - token: macshot
+    type: cask
+    group: apps
+    app: macshot.app
+    name: macshot
+    docs: https://github.com/sw33tLie/macshot
+
   - token: visual-studio-code
     type: cask
     group: apps

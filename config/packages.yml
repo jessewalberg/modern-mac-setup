@@ -124,6 +124,62 @@ packages:
     name: Zed
     docs: https://zed.dev/docs
 
+  - token: cursor
+    type: cask
+    group: apps
+    app: Cursor.app
+    name: Cursor
+    docs: https://cursor.com/docs
+
+  - token: antigravity
+    type: cask
+    group: apps
+    app: Antigravity.app
+    name: Google Antigravity
+    docs: https://antigravity.google/product/antigravity-2
+
+  - token: claude-code
+    type: cask
+    group: apps
+    command: claude
+    name: Claude Code
+    docs: https://code.claude.com/docs/en/overview
+
+  - token: codex
+    type: cask
+    group: apps
+    command: codex
+    name: Codex CLI
+    docs: https://developers.openai.com/codex/cli/
+
+  - token: copilot-cli
+    type: cask
+    group: apps
+    command: copilot
+    name: GitHub Copilot CLI
+    docs: https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-getting-started
+
+  - token: antigravity-cli
+    type: cask
+    group: apps
+    command: agy
+    name: Google Antigravity CLI
+    docs: https://antigravity.google/docs/cli-overview
+
+  - token: cursor-cli
+    type: cask
+    group: apps
+    command: cursor-agent
+    name: Cursor CLI
+    docs: https://docs.cursor.com/en/cli/overview
+
+  - token: opencode
+    type: formula
+    group: apps
+    command: opencode
+    name: OpenCode
+    docs: https://opencode.ai/docs
+
   - token: ghostty
     type: cask
     group: apps

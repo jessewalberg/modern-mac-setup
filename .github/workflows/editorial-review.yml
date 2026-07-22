@@ -62,6 +62,15 @@ jobs:
           - [ ] Confirm competing applications are presented as choices rather than installed together.
           - [ ] Remove recommendations that no longer earn their maintenance or security cost.
 
+          ## AI editors and coding agents
+
+          - [ ] Confirm current product, command, Homebrew token, and replacement names from official sources.
+          - [ ] Review subscription, organization-policy, API-billing, telemetry, code-use, and data-retention changes.
+          - [ ] Review workspace trust, file and shell permissions, sandboxing, unattended modes, and network access.
+          - [ ] Confirm vendor-native versus Homebrew update ownership remains described accurately.
+          - [ ] Review MCP, plugin, hook, skill, extension, and project-instruction trust boundaries.
+          - [ ] Keep all agents optional and remove deprecated or overlapping recommendations.
+
           ## Guidance quality
 
           - [ ] Walk every README path and documentation link.

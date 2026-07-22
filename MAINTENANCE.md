@@ -10,7 +10,7 @@ This repository is actively maintained through automated checks and recurring hu
 | Every Monday | Clean macOS resolution and installation test | Foundation and CLI packages are installed, expected commands are verified, and the deep audit runs. |
 | Monthly | Homebrew token and upstream freshness review | A public tracking issue is created or refreshed with the current report. |
 | Weekly | GitHub Actions dependency updates | Dependabot proposes grouped, reviewable updates. |
-| Quarterly | Editorial review reminder | A public checklist issue asks a human to reassess platform advice, apps, permissions, licensing, and alternatives. |
+| Quarterly | Editorial review reminder | A public checklist issue asks a human to reassess platform advice, apps, coding agents, permissions, licensing, data use, and alternatives. |
 | Major macOS release | Focused compatibility review | The editorial workflow can be dispatched for a release-specific review. |
 | Annually | Clean-machine acceptance test | The entire guide is exercised on a clean or disposable Mac. |
 
@@ -29,13 +29,15 @@ All scheduled workflows also support manual dispatch. This matters because GitHu
 
 ## What still requires human judgment
 
-Automation cannot decide whether an application remains trustworthy, well-designed, appropriately licensed, privacy-respecting, or worth recommending. The recurring editorial review covers:
+Automation cannot decide whether an application or coding agent remains trustworthy, well-designed, appropriately licensed, privacy-respecting, or worth recommending. The recurring editorial review covers:
 
 - macOS support assumptions and changed System Settings paths;
 - vendor ownership, licensing, telemetry, update channels, and requested permissions;
+- coding-agent product names, command names, deprecations, replacement paths, subscriptions, API billing, organization policies, code use, and data retention;
+- coding-agent workspace trust, sandboxing, command approval, unattended modes, network access, and MCP/plugin/hook/skill/extension boundaries;
 - Apple silicon and Intel support;
 - safer, simpler, native, and open-source alternatives;
-- applications that compete and should remain explicit choices;
+- applications and agents that compete and should remain explicit choices;
 - outdated advice that still passes technically;
 - clean-machine usability, recovery, uninstall, and rerun behavior.
 
@@ -55,7 +57,7 @@ Users can inspect:
 - Dependabot pull requests for automation dependencies;
 - commit history for the rationale behind recommendation changes.
 
-A green workflow is evidence that the tested installation path worked at that commit. It is not a security certification or a promise that every optional application is appropriate for every user.
+A green workflow is evidence that the tested installation path worked at that commit. It is not a security certification or a promise that every optional application or coding agent is appropriate for every user.
 
 ## Adding or changing a package
 

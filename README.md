@@ -2,29 +2,28 @@
 
 [![Lint](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/lint.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/lint.yml) [![Maintenance](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/validate-maintenance.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/validate-maintenance.yml) [![Freshness](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/freshness.yml/badge.svg)](https://github.com/jessewalberg/modern-mac-setup/actions/workflows/freshness.yml)
 
-A practical, security-conscious path from a new Mac to a small developer setup.
+A small, maintained path from a new Mac to a useful developer setup.
 
 **Supports:** macOS 14 or newer; Apple silicon first, with native Intel support while Homebrew supports it.  
 **Last human review:** July 22, 2026
 
-This guide keeps the default install small. Applications, coding agents, shell changes, and macOS preferences are opt-in.
+The default install is deliberately small. Applications, coding agents, shell changes, and macOS preferences are opt-in.
 
-> **Built to stay current:** automated checks regularly test packages and workflows, and humans review the guide after major macOS releases. Recommendations should follow current official guidance rather than preserve old commands. See the [maintenance policy](MAINTENANCE.md).
+> **Built to stay current:** automation checks packages and workflows, while human reviews replace obsolete advice with current official guidance.
 >
-> Maintainers and coding agents: start with [`AGENTS.md`](AGENTS.md). The README is intentionally for people setting up a Mac.
+> Coding agents and maintainers should read [`AGENTS.md`](AGENTS.md). This README is for the person setting up the Mac.
 
-## 1. Secure the Mac first
+## Before touching the terminal
 
-Before installing developer tools:
-
-1. Install all macOS updates.
+1. Install all available macOS updates.
 2. Turn on FileVault and the firewall.
-3. Set up a backup you can restore from.
-4. Save recovery information somewhere other than this Mac.
+3. Configure a backup and restore one representative file.
+4. Store recovery information somewhere other than the Mac.
+5. Decide whether to migrate data or start clean. Reinstall developer tools from current sources instead of copying Homebrew prefixes and old binaries.
 
-Use the [security and backup checklist](docs/01-security-and-backups.md) when you need the details.
+## Install the developer baseline
 
-## 2. Install Apple's tools and clone the guide
+Install Apple's Command Line Tools:
 
 ```bash
 xcode-select --install
@@ -38,11 +37,7 @@ cd modern-mac-setup
 ./scripts/audit.sh
 ```
 
-The audit is read-only.
-
-## 3. Preview, then install the developer basics
-
-First see exactly what would run:
+Preview the setup:
 
 ```bash
 ./scripts/bootstrap.sh \
@@ -52,7 +47,7 @@ First see exactly what would run:
   --configure-shell
 ```
 
-Then apply the same setup:
+Apply it:
 
 ```bash
 ./scripts/bootstrap.sh \
@@ -61,20 +56,18 @@ Then apply the same setup:
   --configure-shell
 ```
 
-The foundation installs four tools:
+The foundation installs:
 
 - `git` for source control;
 - `gh` for GitHub;
-- `mise` for project-pinned runtimes and developer tools;
-- `uv` for Python projects, environments, and tools.
+- `mise` for project-pinned runtimes and tools;
+- `uv` for Python projects and tools.
 
-`--with-cli` adds `bat`, `fd`, `fzf`, `jq`, `ripgrep`, `shellcheck`, `shfmt`, and `tree`. Omit that flag for the smallest install. `--configure-shell` adds a managed Homebrew and `mise` block to `~/.zshrc`.
+`--with-cli` adds `bat`, `fd`, `fzf`, `jq`, `ripgrep`, `shellcheck`, `shfmt`, and `tree`. Omit it for the smallest install. No graphical applications are installed.
 
-No graphical applications or AI coding agents are installed.
+Run `./scripts/bootstrap.sh --help` for every option.
 
-Run `./scripts/bootstrap.sh --help` for every option and read [bootstrap details](docs/02-bootstrap.md) only when you need them.
-
-## 4. Add only the applications you choose
+## Add only the applications you use
 
 ```bash
 cp Brewfile.apps.example Brewfile.apps
@@ -82,85 +75,74 @@ ${EDITOR:-nano} Brewfile.apps
 ./scripts/bootstrap.sh --apps Brewfile.apps
 ```
 
-The example includes alternatives for password managers, browsers, Discord or Slack, editors, coding agents, terminal workspaces such as cmux, containers, launchers, and window managers. Uncomment only what belongs on this Mac.
+The example contains commented choices for password managers, browsers, Discord or Slack, editors, coding agents, terminal workspaces such as cmux, containers, launchers, and window managers. Uncomment one option only when it solves a real need.
 
-See [applications and preferences](docs/05-apps-and-preferences.md) for permissions and selection guidance. See [communities and modern tool discovery](docs/08-communities.md) for cmux's official community, Mac Admins Slack, project Discords, GitHub Discussions, forums, Matrix, IRC, meetings, and user groups.
+A browser is enough for occasional community access. Start with one editor or coding agent, learn its permissions and data model, and add another only for a distinct workflow.
 
-## 5. Optionally choose an editor and coding agent
+## Configure identity and project runtimes
 
-No AI tool is required. Start with one agent, understand what it can read, edit, and execute, then add another only when it solves a different problem.
-
-- [ ] Keep the current editor and install no coding agent yet.
-- [ ] Choose at most one visual workspace to evaluate: Visual Studio Code, Zed, Cursor, or Google Antigravity.
-- [ ] Choose zero or one terminal agent to evaluate: Claude Code, Codex, GitHub Copilot CLI, Antigravity CLI, Cursor CLI, OpenCode, or Aider.
-- [ ] Before signing in, review account cost, code and prompt data use, workspace trust, command approval, update ownership, and any MCP servers or plugins.
-
-Homebrew-managed choices are commented in `Brewfile.apps.example`. Aider uses an isolated `uv` tool environment instead of the Brewfile.
-
-Use the [modern coding-tool decision guide](docs/07-ai-coding-tools.md) to compare the options, installation owners, current naming, and first-run safety checks.
-
-## 6. Keep runtimes with projects
-
-Use `mise` for Node, Go, Java, Ruby, Terraform, and similar tools. Use `uv` for Python. Declare versions inside each project rather than making this Mac setup repository a hidden source of project requirements.
-
-See [project runtimes](docs/04-runtimes.md) for examples.
-
-## 7. Optionally review four visible macOS preferences
-
-These choices are separate from the developer bootstrap. Choose them manually in macOS, preview the repository script, or skip them.
-
-### Finder visibility
-
-- **Show all filename extensions — recommended for development.** Makes names such as `README.md`, `config.json`, and `script.sh` unambiguous. Manual path: **Finder → Settings → Advanced → Show all filename extensions**.
-- **Show the path bar — recommended.** Displays the current folder hierarchy at the bottom of Finder windows. Manual path: **Finder → View → Show Path Bar**.
-- **Show the status bar — optional.** Displays the item count and available disk space. Manual path: **Finder → View → Show Status Bar**.
-
-### Screenshot storage
-
-- **Save future captures in `~/Pictures/Screenshots` — personal choice.** The script creates that folder when needed and changes where future files from the built-in Screenshot tools are saved. It does not move existing screenshots or recordings. Manual path: **Shift-Command-5 → Options → Save to → Other Location**.
-
-Read the human-readable plan and exact commands without changing the Mac:
+Set Git authorship explicitly, then authenticate through GitHub CLI:
 
 ```bash
-less scripts/macos-defaults.sh
+git config --global user.name "YOUR NAME"
+git config --global user.email "YOUR COMMIT EMAIL"
+gh auth login
+gh auth status --hostname github.com
+```
+
+Use `uv` for Python and `mise` for Node, Go, Java, Ruby, Terraform, and similar tools. Declare versions inside each project instead of turning this Mac repository into a hidden global runtime list.
+
+## Optional macOS preferences
+
+The preferences script can show filename extensions, Finder's path and status bars, and save future screenshots in `~/Pictures/Screenshots`.
+
+Preview without changing anything:
+
+```bash
 ./scripts/macos-defaults.sh
 ```
 
-Apply all four only after reviewing them:
+Apply after review:
 
 ```bash
 ./scripts/macos-defaults.sh --apply
 ```
 
-Applying records the previous raw values for reference, then briefly restarts Finder and SystemUIServer so the changes appear. Finder windows or parts of the menu bar may disappear and relaunch. The script does not yet provide one-command restore; use the manual paths above to change a choice back.
+The script records previous raw values and briefly restarts Finder and SystemUIServer. It does not provide one-command restore yet.
 
-See [macOS preference details and other manual quality-of-life checks](docs/05-apps-and-preferences.md#review-macos-preferences-in-plain-language).
+## Keep the Mac healthy
 
-## Check the result
+Regularly review:
 
 ```bash
+brew update
+brew outdated
+mise outdated
 ./scripts/audit.sh --deep
 ```
 
-Warnings are prompts to review, not proof that the Mac is unsafe.
+Install macOS security updates, keep browsers and password managers current, review new privacy permissions and login items, push important work, and test a backup restore. Apply Homebrew upgrades deliberately with `brew upgrade`.
 
-## Read more when needed
+A green workflow means the tested path worked at that commit. It is not a security certification.
 
-- [New setup or migration?](docs/migration.md)
-- [Git and GitHub authentication](docs/03-git-and-github.md)
-- [Optional AI coding tools](docs/07-ai-coding-tools.md)
-- [Communities and modern tool discovery](docs/08-communities.md)
-- [Maintenance and updates](docs/06-maintenance.md)
-- [Troubleshooting](docs/troubleshooting.md)
-- [Design principles](docs/design-principles.md)
-- [Continuous maintenance policy](MAINTENANCE.md)
+## Common fixes
+
+| Problem | First step |
+| --- | --- |
+| Command Line Tools missing | Run `xcode-select --install`, finish the installer, and verify `xcode-select -p` |
+| `brew` is not on `PATH` | Load `/opt/homebrew/bin/brew shellenv` on Apple silicon or the `/usr/local` equivalent on Intel |
+| Bootstrap reports Rosetta | Relaunch the terminal natively; do not install a second Intel Homebrew |
+| GitHub authentication fails | Run `gh auth status --hostname github.com`, then `gh auth login` |
+| Runtime tools are missing | Open a new terminal, then run `mise doctor` or `uv tool list` |
+
+Do not fix setup problems with `sudo brew`, `chmod -R 777`, broad ownership changes, disabled security controls, or random versioned Cellar paths.
 
 ## Guardrails
 
-The scripts do not disable macOS security controls, run Homebrew with `sudo`, install Rosetta, grant privacy permissions, write your identity or credentials, sign in to AI providers, enable agent autonomy, remove unrelated software, or install a large personal application stack.
+The scripts do not disable macOS security controls, run Homebrew as root, install Rosetta, grant privacy permissions, write identity or credentials, sign in to AI providers, enable unattended agents, remove unrelated software, or install a large personal application stack.
 
-## Contributing
+## More detail
 
-Human contributors should read [`CONTRIBUTING.md`](CONTRIBUTING.md). Coding agents should read [`AGENTS.md`](AGENTS.md) before editing.
+The single [reference document](docs/REFERENCE.md) contains the deeper security, migration, bootstrap, Git, runtime, application, community, maintenance, and troubleshooting notes.
 
-MIT licensed. See [`LICENSE`](LICENSE).
+Human contributors should read [`CONTRIBUTING.md`](CONTRIBUTING.md). Security-sensitive reports should follow [`SECURITY.md`](SECURITY.md). MIT licensed; see [`LICENSE`](LICENSE).

@@ -3,8 +3,8 @@
 #   ./scripts/bootstrap.sh --apps Brewfile.apps
 #
 # Homebrew casks install vendor applications and have a different trust model
-# from Homebrew formulae. Review the vendor, license, permissions, and update
-# channel before uncommenting a line.
+# from Homebrew formulae. Review the vendor, license, permissions, data use,
+# account requirements, and update channel before uncommenting a line.
 
 # Password manager — choose one.
 # cask "1password"
@@ -13,9 +13,25 @@
 # Browser — Safari is already present; add another only when needed.
 # cask "firefox"
 
-# Editor — choose one or keep the editor already used by the team.
+# Editor or visual agent workspace — choose one, or keep your current editor.
 # cask "visual-studio-code"
 # cask "zed"
+# cask "cursor"
+# cask "antigravity"
+
+# Terminal coding agent — choose zero or one to start.
+# Learn its workspace-trust, command-approval, data-use, and update model before
+# adding another agent. None of these are part of the default setup.
+# cask "claude-code"      # command: claude; Homebrew stable channel
+# cask "codex"            # command: codex
+# cask "copilot-cli"      # command: copilot; requires GitHub Copilot access
+# cask "antigravity-cli"  # command: agy
+# cask "cursor-cli"       # command: cursor-agent; currently beta
+# brew "opencode"         # command: opencode; Homebrew core may lag upstream
+#
+# Aider is intentionally not declared here. Its maintainers recommend an
+# isolated Python environment; install it with uv as described in
+# docs/07-ai-coding-tools.md.
 
 # Terminal — Terminal.app is sufficient for the bootstrap.
 # cask "ghostty"

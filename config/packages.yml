@@ -110,6 +110,20 @@ packages:
     name: Firefox
     docs: https://support.mozilla.org/products/firefox
 
+  - token: discord
+    type: cask
+    group: apps
+    app: Discord.app
+    name: Discord
+    docs: https://support.discord.com/
+
+  - token: slack
+    type: cask
+    group: apps
+    app: Slack.app
+    name: Slack
+    docs: https://slack.com/help
+
   - token: visual-studio-code
     type: cask
     group: apps
@@ -179,6 +193,13 @@ packages:
     command: opencode
     name: OpenCode
     docs: https://opencode.ai/docs
+
+  - token: cmux
+    type: cask
+    group: apps
+    app: cmux.app
+    name: cmux
+    docs: https://cmux.com/docs
 
   - token: ghostty
     type: cask

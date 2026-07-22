@@ -31,10 +31,13 @@ screenshots_dir="$HOME/Pictures/Screenshots"
 
 usage() {
   cat <<'EOF'
-Usage: ./scripts/macos-defaults.sh [--apply]
+Usage: ./scripts/macos-defaults.sh [--apply | --dry-run]
 
 No arguments
   Explain all four choices and print the exact commands without changing the Mac.
+
+--dry-run
+  Explicitly select the same preview-only behavior as running with no arguments.
 
 --apply
   Record the previous raw values, then apply all four choices.

@@ -1,36 +1,15 @@
 # Security Policy
 
-This repository contains scripts that install software and modify a small number of user preferences. Treat every change as code that may run with the current user's privileges. Homebrew's official installer may separately request administrator authorization for documented setup operations.
+This repository installs software and can modify a few user preferences. Treat every change as code running with the current user's privileges. Homebrew's official installer may separately request administrator authorization for its documented setup.
 
-## Reporting a vulnerability
+## Report a vulnerability
 
-Use GitHub's private vulnerability reporting feature when it is enabled for this repository. When private reporting is unavailable, open a minimal issue requesting a private contact channel and omit exploit details, credentials, private hostnames, and personal data.
+Use GitHub private vulnerability reporting when available. Otherwise, open a minimal issue requesting a private contact channel and omit exploit details or sensitive data.
 
-Do not include:
+Never post tokens, cookies, passwords, private keys, FileVault or account recovery material, unredacted environment dumps, serial numbers, internal hosts, private repository names, or customer data.
 
-- access tokens or cookies;
-- private SSH keys;
-- FileVault or account recovery keys;
-- passwords or multi-factor recovery codes;
-- unredacted environment dumps;
-- proprietary application inventories;
-- device serial numbers or internal organization details.
+Relevant issues include unintended command execution, unsafe path handling, privilege escalation, secret disclosure, insecure downloads, destructive file changes, architecture confusion, and instructions that weaken macOS security controls.
 
-## Scope
+Report upstream vulnerabilities to the relevant upstream project as well. Open an issue here when this guide amplifies or mishandles that risk.
 
-Security-relevant issues include:
-
-- unintended command execution;
-- unsafe quoting or path handling;
-- privilege escalation;
-- secret disclosure;
-- insecure remote downloads;
-- destructive or unexpectedly broad file changes;
-- architecture confusion that installs or executes the wrong binaries;
-- instructions that disable macOS security controls.
-
-Upstream vulnerabilities in macOS, Homebrew, a formula, cask, GitHub CLI, `mise`, `uv`, or another selected application should also be reported to the relevant upstream security channel. A repository issue may be appropriate when this guide amplifies or mishandles the upstream risk.
-
-## Supported version
-
-Security fixes apply to the current `main` branch. The repository does not publish a long-term-support branch or guarantee safe operation on macOS versions outside the documented target.
+Security fixes apply to the current `main` branch. Unsupported macOS versions are outside this repository's documented target.

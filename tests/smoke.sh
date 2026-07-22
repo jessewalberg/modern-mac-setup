@@ -79,14 +79,20 @@ output="$(
     "$ROOT_DIR/scripts/bootstrap.sh" \
     --dry-run \
     --with-cli \
-    --configure-shell \
-    --apply-defaults 2>&1
+    --configure-shell 2>&1
 )"
 assert_contains "$output" 'brew bundle install'
 assert_contains "$output" '--no-upgrade'
 assert_contains "$output" 'configure-shell.sh --dry-run'
-assert_contains "$output" 'macos-defaults.sh'
 [[ ! -e "$TEST_HOME/.zshrc" ]] || fail 'Bootstrap dry run created .zshrc.'
+
+if output="$(
+  PATH="$TEST_PATH" HOME="$TEST_HOME" \
+    "$ROOT_DIR/scripts/bootstrap.sh" --dry-run --apply-defaults 2>&1
+)"; then
+  fail 'Bootstrap still accepted the removed --apply-defaults option.'
+fi
+assert_contains "$output" 'Unknown option: --apply-defaults'
 
 if output="$(
   PATH="$TEST_PATH" HOME="$TEST_HOME" MOCK_TRANSLATED=1 \
@@ -122,7 +128,17 @@ cmp -s "$first_copy" "$TEST_HOME/.zshrc" || fail 'Shell configuration was not id
 [[ "$(grep -Fc '# >>> modern-mac-setup >>>' "$TEST_HOME/.zshrc")" -eq 1 ]] || fail 'Managed shell marker count is not one.'
 find "$TEST_HOME" -maxdepth 1 -name '.zshrc.backup.*' -print -quit | grep -q . || fail 'Shell configuration did not create a backup.'
 
-PATH="$TEST_PATH" HOME="$TEST_HOME" "$ROOT_DIR/scripts/macos-defaults.sh" >/dev/null
+output="$(
+  PATH="$TEST_PATH" HOME="$TEST_HOME" \
+    "$ROOT_DIR/scripts/macos-defaults.sh" 2>&1
+)"
+assert_contains "$output" 'Show all filename extensions'
+assert_contains "$output" 'Finder > Settings > Advanced'
+assert_contains "$output" 'Show the Finder path bar'
+assert_contains "$output" 'Show the Finder status bar'
+assert_contains "$output" 'Existing screenshots and recordings are not moved'
+assert_contains "$output" 'Finder and SystemUIServer'
+assert_contains "$output" 'defaults write NSGlobalDomain AppleShowAllExtensions'
 [[ ! -d "$TEST_HOME/Pictures/Screenshots" ]] || fail 'macOS defaults dry run created the screenshot directory.'
 
 printf '[OK] Linux smoke tests passed.\n'

@@ -73,10 +73,11 @@ jobs:
 
           ## Guidance quality
 
-          - [ ] Walk every README path and documentation link.
+          - [ ] Walk the README and consolidated reference from start to finish.
           - [ ] Confirm advice is sourced from primary documentation where practical.
           - [ ] Check that manual steps remain manual when automation would require secrets or privileged permissions.
           - [ ] Confirm examples, commands, expected outputs, and troubleshooting guidance.
+          - [ ] Remove duplication instead of adding another narrow guide.
           - [ ] Update human-review dates only after completing the review.
 
           ## Clean-machine acceptance test

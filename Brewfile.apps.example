@@ -99,7 +99,7 @@
 # three formulae together; do not combine this stack with Docker Desktop.
 # brew "colima"
 # brew "docker"
-# brew "docker-compose"
+# brew "docker-compose"  # command: docker-compose; `docker compose` needs plugin config
 
 # Window management / launcher — both require meaningful permissions.
 # cask "rectangle"

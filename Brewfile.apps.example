@@ -10,10 +10,47 @@
 # cask "1password"
 # cask "bitwarden"
 
-# Browser — Safari is already present; add another only when needed.
+# Browser — Safari is built in. Choose one stable browser to start.
+# Release-preview channels, deprecated casks, and regional anti-detect browsers
+# are intentionally omitted.
+#
+# Mainstream browser families.
+# cask "google-chrome"
 # cask "firefox"
+# cask "brave-browser"
+# cask "microsoft-edge"
+# cask "vivaldi"
+# cask "opera"
+#
+# macOS-focused and alternative interfaces.
+# cask "arc"
+# cask "orion"
+# cask "duckduckgo"
+# cask "zen"
+#
+# Privacy and security-focused alternatives.
+# cask "floorp"
+# cask "waterfox"
+# cask "tor-browser"
+# cask "mullvad-browser"
+# cask "ungoogled-chromium"
+# cask "aloha-browser"
+#
+# AI and workspace browsers.
+# cask "thebrowsercompany-dia"
+# cask "comet"
+# cask "chatgpt-atlas"  # Apple silicon and macOS 14+
+# cask "browseros"
+# cask "sigmaos"
+# cask "wavebox"
+#
+# Specialized browsers.
+# cask "opera-gx"
+# cask "opera-air"
+# cask "responsively"  # responsive web-development testing
+# cask "blisk"         # developer-oriented browser
 
-# Communication and community — the browser is enough for occasional access.
+# Communication and community — a browser is enough for occasional access.
 # cask "discord"
 # cask "slack"
 
@@ -34,6 +71,10 @@
 # cask "antigravity-cli"  # command: agy
 # cask "cursor-cli"       # command: cursor-agent; currently beta
 # brew "opencode"         # command: opencode; Homebrew core may lag upstream
+#
+# Pi is an extensible agent harness distributed through npm, not Homebrew:
+# npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+# Command: pi
 #
 # Aider is intentionally installed in an isolated uv tool environment; see
 # docs/REFERENCE.md#ai-coding-tools.

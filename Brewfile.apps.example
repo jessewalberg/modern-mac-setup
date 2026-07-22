@@ -17,6 +17,9 @@
 # cask "discord"
 # cask "slack"
 
+# Screenshots — macOS shortcuts are sufficient for basic capture.
+# cask "macshot"  # open-source capture, annotation, OCR, scrolling, and recording
+
 # Editor or visual agent workspace — choose one, or keep your current editor.
 # cask "visual-studio-code"
 # cask "zed"

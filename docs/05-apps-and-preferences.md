@@ -43,6 +43,14 @@ The `mas` command can automate Mac App Store installations after the user signs 
 
 Record App Store applications only after confirming the numeric identifier with the signed-in account. Never automate Apple-account passwords or multi-factor authentication.
 
+## AI editors and coding agents
+
+Coding agents deserve a stricter review than ordinary applications because they may read repositories, modify files, execute shell commands, use network services, and load project instructions or third-party tools.
+
+The application example includes current editor and terminal-agent choices, but every line remains commented. Start with one agent rather than installing a stack of overlapping tools. Review the [optional AI coding-tools guide](07-ai-coding-tools.md) before selecting an editor, agent, installation owner, account, permission mode, or MCP integration.
+
+This repository never signs in to a provider, stores API keys, enables unattended execution, or configures plugins, hooks, skills, extensions, or MCP servers.
+
 ## Terminal and shell
 
 Terminal.app and the default zsh are sufficient for bootstrapping. Add another terminal or shell framework only for a concrete requirement.
@@ -173,4 +181,4 @@ These are common things to consider, not universal recommendations:
 
 Keep these manual because they depend on hardware, accessibility, account ownership, privacy, or personal workflow. Accessibility, Full Disk Access, Screen Recording, Input Monitoring, and other privacy grants must always remain user decisions.
 
-Continue with [Maintenance](06-maintenance.md).
+Continue with [Optional AI Coding Tools](07-ai-coding-tools.md) or [Maintenance](06-maintenance.md).

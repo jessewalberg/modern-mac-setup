@@ -63,8 +63,11 @@ These sources informed the repository's current behavior. They are intentionally
 - [1Password support](https://support.1password.com/)
 - [Bitwarden help](https://bitwarden.com/help/)
 - [Firefox support](https://support.mozilla.org/products/firefox)
+- [Discord support](https://support.discord.com/)
+- [Slack help](https://slack.com/help)
 - [Visual Studio Code documentation](https://code.visualstudio.com/docs)
 - [Zed documentation](https://zed.dev/docs)
+- [cmux documentation](https://cmux.com/docs)
 - [Ghostty documentation](https://ghostty.org/docs)
 - [iTerm2 documentation](https://iterm2.com/documentation.html)
 - [Docker Desktop for Mac](https://docs.docker.com/desktop/setup/install/mac-install/)
@@ -94,6 +97,20 @@ These sources informed the repository's current behavior. They are intentionally
 - [OpenCode documentation](https://opencode.ai/docs)
 - [Aider installation](https://aider.chat/docs/install.html)
 - [Aider dependency guidance](https://aider.chat/docs/troubleshooting/imports.html)
+
+## Communities and support
+
+- [cmux community hub](https://cmux.com/community)
+- [Ghostty community and support](https://ghostty.org/docs/help)
+- [Zed support and community channels](https://zed.dev/support)
+- [Mac Admins](https://www.macadmins.org/)
+- [Apple Developer Forums](https://developer.apple.com/forums/)
+- [Homebrew Discussions](https://github.com/orgs/Homebrew/discussions)
+- [mise Discussions](https://github.com/jdx/mise/discussions)
+- [Astral community Discord](https://discord.com/invite/astral-sh)
+- [Docker Community](https://www.docker.com/community/)
+- [OrbStack help and community](https://docs.orbstack.dev/help)
+- [Podman Community](https://podman.io/community/)
 
 ## Repository automation
 

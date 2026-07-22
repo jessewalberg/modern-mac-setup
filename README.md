@@ -82,9 +82,9 @@ ${EDITOR:-nano} Brewfile.apps
 ./scripts/bootstrap.sh --apps Brewfile.apps
 ```
 
-The example includes alternatives for password managers, browsers, editors, coding agents, terminals, containers, launchers, and window managers. Uncomment only what belongs on this Mac.
+The example includes alternatives for password managers, browsers, Discord or Slack, editors, coding agents, terminal workspaces such as cmux, containers, launchers, and window managers. Uncomment only what belongs on this Mac.
 
-See [applications and preferences](docs/05-apps-and-preferences.md) for permissions and selection guidance.
+See [applications and preferences](docs/05-apps-and-preferences.md) for permissions and selection guidance. See [communities and modern tool discovery](docs/08-communities.md) for cmux's official community, Mac Admins Slack, project Discords, GitHub Discussions, forums, Matrix, IRC, meetings, and user groups.
 
 ## 5. Optionally choose an editor and coding agent
 
@@ -149,6 +149,7 @@ Warnings are prompts to review, not proof that the Mac is unsafe.
 - [New setup or migration?](docs/migration.md)
 - [Git and GitHub authentication](docs/03-git-and-github.md)
 - [Optional AI coding tools](docs/07-ai-coding-tools.md)
+- [Communities and modern tool discovery](docs/08-communities.md)
 - [Maintenance and updates](docs/06-maintenance.md)
 - [Troubleshooting](docs/troubleshooting.md)
 - [Design principles](docs/design-principles.md)

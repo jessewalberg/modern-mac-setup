@@ -103,12 +103,187 @@ packages:
     name: Bitwarden
     docs: https://bitwarden.com/help/
 
+  - token: google-chrome
+    type: cask
+    group: apps
+    app: Google Chrome.app
+    name: Google Chrome
+    docs: https://www.google.com/chrome/
+
   - token: firefox
     type: cask
     group: apps
     app: Firefox.app
     name: Firefox
     docs: https://support.mozilla.org/products/firefox
+
+  - token: brave-browser
+    type: cask
+    group: apps
+    app: Brave Browser.app
+    name: Brave
+    docs: https://brave.com/
+
+  - token: microsoft-edge
+    type: cask
+    group: apps
+    app: Microsoft Edge.app
+    name: Microsoft Edge
+    docs: https://www.microsoft.com/en-us/edge
+
+  - token: vivaldi
+    type: cask
+    group: apps
+    app: Vivaldi.app
+    name: Vivaldi
+    docs: https://vivaldi.com/
+
+  - token: opera
+    type: cask
+    group: apps
+    app: Opera.app
+    name: Opera
+    docs: https://www.opera.com/
+
+  - token: arc
+    type: cask
+    group: apps
+    app: Arc.app
+    name: Arc
+    docs: https://arc.net/
+
+  - token: orion
+    type: cask
+    group: apps
+    app: Orion.app
+    name: Orion Browser
+    docs: https://browser.kagi.com/
+
+  - token: duckduckgo
+    type: cask
+    group: apps
+    app: DuckDuckGo.app
+    name: DuckDuckGo
+    docs: https://duckduckgo.com/
+
+  - token: zen
+    type: cask
+    group: apps
+    app: Zen.app
+    name: Zen Browser
+    docs: https://zen-browser.app/
+
+  - token: floorp
+    type: cask
+    group: apps
+    app: Floorp.app
+    name: Floorp
+    docs: https://floorp.app/
+
+  - token: waterfox
+    type: cask
+    group: apps
+    app: Waterfox.app
+    name: Waterfox
+    docs: https://www.waterfox.net/
+
+  - token: tor-browser
+    type: cask
+    group: apps
+    app: Tor Browser.app
+    name: Tor Browser
+    docs: https://www.torproject.org/
+
+  - token: mullvad-browser
+    type: cask
+    group: apps
+    app: Mullvad Browser.app
+    name: Mullvad Browser
+    docs: https://mullvad.net/browser
+
+  - token: ungoogled-chromium
+    type: cask
+    group: apps
+    app: Chromium.app
+    name: Ungoogled Chromium
+    docs: https://ungoogled-software.github.io/
+
+  - token: aloha-browser
+    type: cask
+    group: apps
+    app: Aloha.app
+    name: Aloha Browser
+    docs: https://alohabrowser.com/
+
+  - token: thebrowsercompany-dia
+    type: cask
+    group: apps
+    app: Dia.app
+    name: Dia
+    docs: https://www.diabrowser.com/
+
+  - token: comet
+    type: cask
+    group: apps
+    app: Comet.app
+    name: Comet
+    docs: https://www.perplexity.ai/comet
+
+  - token: chatgpt-atlas
+    type: cask
+    group: apps
+    app: ChatGPT Atlas.app
+    name: ChatGPT Atlas
+    docs: https://chatgpt.com/atlas
+
+  - token: browseros
+    type: cask
+    group: apps
+    app: BrowserOS.app
+    name: BrowserOS
+    docs: https://www.browseros.com/
+
+  - token: sigmaos
+    type: cask
+    group: apps
+    app: SigmaOS.app
+    name: SigmaOS
+    docs: https://sigmaos.com/
+
+  - token: wavebox
+    type: cask
+    group: apps
+    app: Wavebox.app
+    name: Wavebox
+    docs: https://wavebox.io/
+
+  - token: opera-gx
+    type: cask
+    group: apps
+    app: Opera GX.app
+    name: Opera GX
+    docs: https://www.opera.com/gx
+
+  - token: opera-air
+    type: cask
+    group: apps
+    app: Opera Air.app
+    name: Opera Air
+    docs: https://www.opera.com/air
+
+  - token: responsively
+    type: cask
+    group: apps
+    app: ResponsivelyApp.app
+    name: Responsively
+    docs: https://responsively.app/
+
+  - token: blisk
+    type: cask
+    group: apps
+    app: Blisk.app
+    name: Blisk Browser
+    docs: https://blisk.io/
 
   - token: discord
     type: cask

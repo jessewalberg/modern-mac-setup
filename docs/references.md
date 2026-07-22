@@ -28,6 +28,7 @@ These sources informed the repository's current behavior. They are intentionally
 - [Homebrew security and supply chain](https://docs.brew.sh/Supply-Chain-Security)
 - [Tap trust](https://docs.brew.sh/Tap-Trust)
 - [Formulae and cask catalog](https://formulae.brew.sh/)
+- [Deprecated `gemini-cli` formula](https://formulae.brew.sh/formula/gemini-cli)
 
 ## Git and GitHub
 
@@ -73,6 +74,26 @@ These sources informed the repository's current behavior. They are intentionally
 - [Raycast manual](https://manual.raycast.com/)
 - [chezmoi command overview](https://www.chezmoi.io/user-guide/command-overview/)
 - [`mas`](https://github.com/mas-cli/mas#readme)
+
+## AI editors and coding agents
+
+- [Visual Studio Code agents](https://code.visualstudio.com/features/agents)
+- [Zed Agent Panel](https://zed.dev/docs/assistant/assistant-panel)
+- [Zed Agent Client Protocol](https://zed.dev/acp)
+- [Cursor documentation](https://cursor.com/docs)
+- [Cursor CLI overview](https://docs.cursor.com/en/cli/overview)
+- [Cursor CLI permissions](https://docs.cursor.com/cli/reference/permissions)
+- [Google Antigravity 2](https://antigravity.google/product/antigravity-2)
+- [Google Antigravity CLI overview](https://antigravity.google/docs/cli-overview)
+- [Google Antigravity CLI installation](https://antigravity.google/docs/cli-install)
+- [Claude Code overview](https://code.claude.com/docs/en/overview)
+- [Claude Code installation and update ownership](https://code.claude.com/docs/en/installation)
+- [Codex CLI documentation](https://developers.openai.com/codex/cli/)
+- [OpenAI Codex repository](https://github.com/openai/codex)
+- [GitHub Copilot CLI getting started](https://docs.github.com/en/copilot/how-tos/copilot-cli/cli-getting-started)
+- [OpenCode documentation](https://opencode.ai/docs)
+- [Aider installation](https://aider.chat/docs/install.html)
+- [Aider dependency guidance](https://aider.chat/docs/troubleshooting/imports.html)
 
 ## Repository automation
 

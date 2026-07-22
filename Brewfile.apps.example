@@ -14,8 +14,6 @@
 # cask "firefox"
 
 # Communication and community — the browser is enough for occasional access.
-# Desktop clients add notifications, background activity, local caches, account
-# sessions, and another update channel. Install only what you use regularly.
 # cask "discord"
 # cask "slack"
 
@@ -26,8 +24,7 @@
 # cask "antigravity"
 
 # Terminal coding agent — choose zero or one to start.
-# Learn its workspace-trust, command-approval, data-use, and update model before
-# adding another agent. None of these are part of the default setup.
+# Review workspace trust, command approval, data use, and update ownership.
 # cask "claude-code"      # command: claude; Homebrew stable channel
 # cask "codex"            # command: codex
 # cask "copilot-cli"      # command: copilot; requires GitHub Copilot access
@@ -35,13 +32,11 @@
 # cask "cursor-cli"       # command: cursor-agent; currently beta
 # brew "opencode"         # command: opencode; Homebrew core may lag upstream
 #
-# Aider is intentionally not declared here. Its maintainers recommend an
-# isolated Python environment; install it with uv as described in
-# docs/07-ai-coding-tools.md.
+# Aider is intentionally installed in an isolated uv tool environment; see
+# docs/REFERENCE.md#ai-coding-tools.
 
-# Terminal workspace — Terminal.app is sufficient for bootstrap. Choose a
-# replacement only when its workflow earns the extra application and updates.
-# cask "cmux"     # native macOS workspace for terminals, agents, and browser panes
+# Terminal workspace — Terminal.app is sufficient for bootstrap.
+# cask "cmux"     # workspace for terminals, agents, and browser panes
 # cask "ghostty"  # focused standalone terminal
 # cask "iterm2"   # mature terminal with extensive profiles and integrations
 

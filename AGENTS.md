@@ -22,6 +22,7 @@ Do not expand the README into a package catalog, architecture document, or maint
 | Optional CLI tools | `Brewfile.cli`, `config/packages.yml`, `docs/02-bootstrap.md` |
 | Optional apps | `Brewfile.apps.example`, `config/packages.yml`, `docs/05-apps-and-preferences.md` |
 | Optional AI editors and agents | `Brewfile.apps.example`, `config/packages.yml`, `docs/07-ai-coding-tools.md`, `docs/references.md` |
+| Community and tool discovery | `docs/08-communities.md`, `docs/references.md`, and the relevant official project pages |
 | Bootstrap behavior | `scripts/bootstrap.sh`, `tests/smoke.sh`, `docs/02-bootstrap.md` |
 | Shell setup | `scripts/configure-shell.sh`, `tests/smoke.sh`, `docs/02-bootstrap.md` |
 | macOS preferences | `scripts/macos-defaults.sh`, `tests/smoke.sh`, `docs/05-apps-and-preferences.md` |
@@ -36,13 +37,28 @@ Official documentation links belong in `docs/references.md` or `config/packages.
 ## Human-first documentation rules
 
 - Put the shortest safe path in `README.md`.
-- Put explanations, alternatives, failure modes, and trust boundaries in `docs/`.
+- Put explanations, alternatives, failure modes, trust boundaries, and community maps in `docs/`.
 - Put contributor and automation instructions in `CONTRIBUTING.md`, `MAINTENANCE.md`, and this file.
 - Prefer progressive disclosure: command first, brief consequence second, deep link last.
 - Avoid repeating the same explanation across files. Link to the source of truth.
 - Do not add a tool merely to make the guide look comprehensive.
+- Help readers discover active users and maintainers when that improves a decision or support path.
 
 A README change should make the setup easier to scan. If it adds substantial background or a large table, it probably belongs elsewhere.
+
+## Community-source rules
+
+When adding or updating a community:
+
+- start from an official project or organization page rather than an unverified invite posted elsewhere;
+- prefer a stable community landing page over a raw Discord or Slack invite when one exists;
+- label community-run or unofficial spaces clearly instead of implying vendor support;
+- distinguish chat, searchable Discussions or forums, issue trackers, meetings, and announcement channels by purpose;
+- verify that the community is still linked by the project and shows recent activity before recommending it;
+- avoid copying private messages, member lists, or non-public workspace content;
+- keep the list curated around tools and decisions in this guide rather than attempting a directory of the entire Mac ecosystem.
+
+Community advice is discovery evidence, not authority. Platform-sensitive commands and security claims still require current primary sources.
 
 ## Non-negotiable behavior
 

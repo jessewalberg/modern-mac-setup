@@ -57,6 +57,12 @@
 # Screenshots — macOS shortcuts are sufficient for basic capture.
 # cask "macshot"  # open-source capture, annotation, OCR, scrolling, and recording
 
+# Voice dictation — macOS dictation is built in; add this only for local models.
+# cask "opensuperwhisper"  # open source; macOS 14+ on Apple silicon
+
+# Clipboard history can retain passwords, tokens, and other copied secrets.
+# cask "maccy"  # open-source clipboard manager; configure exclusions carefully
+
 # Editor or visual agent workspace — choose one, or keep your current editor.
 # cask "visual-studio-code"
 # cask "zed"
@@ -88,6 +94,12 @@
 # cask "docker-desktop"
 # cask "orbstack"
 # cask "podman-desktop"
+#
+# Lightweight open-source alternative to a container desktop. Uncomment all
+# three formulae together; do not combine this stack with Docker Desktop.
+# brew "colima"
+# brew "docker"
+# brew "docker-compose"  # command: docker-compose; `docker compose` needs plugin config
 
 # Window management / launcher — both require meaningful permissions.
 # cask "rectangle"

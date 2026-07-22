@@ -105,9 +105,21 @@ The block initializes Homebrew from either supported prefix and activates `mise`
 
 Rerunning the configuration script leaves an existing managed block untouched.
 
+## macOS preferences are separate
+
+Finder visibility and screenshot storage are personal interface choices, not package-installation requirements. The bootstrap therefore does not apply them.
+
+Review the human explanation, manual System Settings or Finder paths, side effects, and exact commands separately:
+
+```bash
+./scripts/macos-defaults.sh
+```
+
+See [Applications and Preferences](05-apps-and-preferences.md#review-macos-preferences-in-plain-language).
+
 ## Dry run
 
-Preview the commands:
+Preview the bootstrap commands:
 
 ```bash
 ./scripts/bootstrap.sh --dry-run --install-homebrew --with-cli --configure-shell
@@ -122,7 +134,6 @@ A dry run cannot prove that network downloads, package conflicts, cask installer
 --with-cli           install Brewfile.cli
 --apps FILE          install an explicitly reviewed application Brewfile
 --configure-shell    append the managed zsh block
---apply-defaults     apply the narrow macOS preference script
 --no-update          skip brew update
 --dry-run            print without changing the machine
 ```

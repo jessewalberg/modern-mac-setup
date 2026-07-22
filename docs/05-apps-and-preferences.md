@@ -43,6 +43,21 @@ The `mas` command can automate Mac App Store installations after the user signs 
 
 Record App Store applications only after confirming the numeric identifier with the signed-in account. Never automate Apple-account passwords or multi-factor authentication.
 
+## Communication and community
+
+A modern setup guide should show where current users and maintainers gather, not only which package to install. See [Communities and Modern Tool Discovery](08-communities.md) for cmux, Mac Admins, Apple Developer Forums, project Discords, Slack, GitHub Discussions, forums, Matrix, IRC, meetings, and user groups.
+
+Discord and Slack are optional access clients, not default developer dependencies. For occasional participation, use the browser. Install a desktop client only when regular use justifies notifications, background activity, local caches, account sessions, and another update channel.
+
+The application example includes both clients as commented choices:
+
+```ruby
+cask "discord"
+cask "slack"
+```
+
+After signing in, review notification settings, login items, microphone and camera permissions, screen sharing, downloaded files, and workspace retention policies.
+
 ## AI editors and coding agents
 
 Coding agents deserve a stricter review than ordinary applications because they may read repositories, modify files, execute shell commands, use network services, and load project instructions or third-party tools.
@@ -53,7 +68,16 @@ This repository never signs in to a provider, stores API keys, enables unattende
 
 ## Terminal and shell
 
-Terminal.app and the default zsh are sufficient for bootstrapping. Add another terminal or shell framework only for a concrete requirement.
+Terminal.app and the default zsh are sufficient for bootstrapping. A replacement should solve a concrete workflow problem rather than appear merely because it is popular.
+
+| Choice | Good fit | Community and overlap |
+| --- | --- | --- |
+| Terminal.app | Minimal setup, native macOS integration, and no extra update owner | Built in; start here when uncertain. |
+| cmux | Multiple projects or coding agents, workspace navigation, notifications, browser panes, and command-line control | Official community hub includes Discord and GitHub. It uses Ghostty as its terminal foundation, so the standalone Ghostty app is not also required. |
+| Ghostty | A focused, fast standalone terminal without cmux's broader workspace layer | GitHub Discussions and a community-moderated Discord are linked from its official help page. |
+| iTerm2 | Mature profiles, panes, triggers, automation, and long-established integrations | A separate terminal with a broad feature surface; add it for a specific capability rather than by default. |
+
+The choices are intentionally commented in `Brewfile.apps.example`. Choose at most one replacement to start, then keep another only when the workflows are meaningfully different.
 
 Heavy shell frameworks can obscure startup cost, aliases, completion behavior, and security-sensitive hooks. Start with the small managed snippet in `snippets/zshrc`, then add one understood change at a time.
 
@@ -181,4 +205,4 @@ These are common things to consider, not universal recommendations:
 
 Keep these manual because they depend on hardware, accessibility, account ownership, privacy, or personal workflow. Accessibility, Full Disk Access, Screen Recording, Input Monitoring, and other privacy grants must always remain user decisions.
 
-Continue with [Optional AI Coding Tools](07-ai-coding-tools.md) or [Maintenance](06-maintenance.md).
+Continue with [Optional AI Coding Tools](07-ai-coding-tools.md), [Communities and Modern Tool Discovery](08-communities.md), or [Maintenance](06-maintenance.md).

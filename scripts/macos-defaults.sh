@@ -96,7 +96,7 @@ done
 }
 
 print_command() {
-  printf ' +'
+  printf '+'
   printf ' %q' "$@"
   printf '\n'
 }

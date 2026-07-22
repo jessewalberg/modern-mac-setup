@@ -2,7 +2,7 @@
 
 These sources informed the repository's current behavior. They are intentionally dominated by platform and tool owners rather than copied setup recipes.
 
-**Reviewed:** July 21, 2026
+**Reviewed:** July 22, 2026
 
 ## Apple
 
@@ -12,6 +12,12 @@ These sources informed the repository's current behavior. They are intentionally
 - [Automatically install Background Security Improvements](https://support.apple.com/guide/mac-help/install-background-security-improvements-mchl44c4c70c/mac)
 - [Block connections with the macOS firewall](https://support.apple.com/guide/mac-help/block-connections-to-your-mac-with-a-firewall-mh34041/mac)
 - [Back up your Mac with Time Machine](https://support.apple.com/en-us/104984)
+- [Show or hide filename extensions](https://support.apple.com/guide/mac-help/show-or-hide-filename-extensions-on-mac-mchlp2304/mac)
+- [Change Finder settings](https://support.apple.com/guide/mac-help/change-finder-settings-mchlp2803/mac)
+- [Show Finder status and path information](https://support.apple.com/guide/mac-help/get-file-folder-and-disk-information-mchlp1774/mac)
+- [Take a screenshot](https://support.apple.com/en-us/102646)
+- [Mac keyboard shortcuts](https://support.apple.com/guide/mac-help/intro-to-mac-keyboard-shortcuts-mchld6b9e240/mac)
+- [Manage login items and background activity](https://support.apple.com/guide/mac-help/open-items-automatically-when-you-log-in-mh15189/mac)
 
 ## Homebrew
 

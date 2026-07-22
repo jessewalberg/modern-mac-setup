@@ -96,13 +96,13 @@ See [project runtimes](docs/04-runtimes.md) for examples.
 
 These choices are separate from the developer bootstrap. Choose them manually in macOS, preview the repository script, or skip them.
 
-**Finder visibility**
+### Finder visibility
 
 - **Show all filename extensions — recommended for development.** Makes names such as `README.md`, `config.json`, and `script.sh` unambiguous. Manual path: **Finder → Settings → Advanced → Show all filename extensions**.
 - **Show the path bar — recommended.** Displays the current folder hierarchy at the bottom of Finder windows. Manual path: **Finder → View → Show Path Bar**.
 - **Show the status bar — optional.** Displays the item count and available disk space. Manual path: **Finder → View → Show Status Bar**.
 
-**Screenshot storage**
+### Screenshot storage
 
 - **Save future captures in `~/Pictures/Screenshots` — personal choice.** The script creates that folder when needed and changes where future files from the built-in Screenshot tools are saved. It does not move existing screenshots or recordings. Manual path: **Shift-Command-5 → Options → Save to → Other Location**.
 

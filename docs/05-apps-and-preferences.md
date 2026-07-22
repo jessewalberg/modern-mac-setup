@@ -114,7 +114,7 @@ Apple notes that changing a filename extension can stop the original application
 
 **Manual equivalent:** Press **Shift-Command-5**, choose **Options → Save to → Other Location**, then select a folder.
 
-**Implementation:**
+The equivalent commands are:
 
 ```bash
 mkdir -p "$HOME/Pictures/Screenshots"

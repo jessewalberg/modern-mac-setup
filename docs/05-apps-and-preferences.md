@@ -62,40 +62,115 @@ Once the shell, Git, editor, and application configuration grows, use a dotfile 
 
 Do not symlink an unknown person's entire home-directory configuration into a new Mac.
 
-## Narrow macOS defaults
+## Review macOS preferences in plain language
 
-Most `defaults write` recipes are undocumented implementation details and can change between macOS versions. Many are personal taste presented as optimization.
+Most copied `defaults write` collections use undocumented implementation keys, mix personal taste with security changes, and provide no reliable rollback. This repository keeps preferences separate from the developer bootstrap and changes only four visible choices.
 
-This repository automates only four settings with clear value and low coupling:
+No additional preference-management CLI is required today. Four settings do not justify another dependency or update channel. Reconsider that only if a future tool can explain, inspect, selectively apply, verify, and restore each setting better than this small script and the native macOS interface.
+
+### Finder visibility
+
+#### Show all filename extensions — recommended for development
+
+**What it does:** Finder displays extensions such as `.md`, `.json`, `.sh`, and `.png`.
+
+**Why consider it:** File types become explicit instead of being inferred from icons or the application associated with a file.
+
+**Manual equivalent:** **Finder → Settings → Advanced → Show all filename extensions**.
+
+**Implementation:** `defaults write NSGlobalDomain AppleShowAllExtensions -bool true`
+
+Apple notes that changing a filename extension can stop the original application from opening the file. Showing extensions does not change them; it only makes them visible.
+
+#### Show the Finder path bar — recommended
+
+**What it does:** Finder displays the current folder hierarchy at the bottom of each window.
+
+**Why consider it:** The location of a file is visible, and parent folders are easier to open.
+
+**Manual equivalent:** **Finder → View → Show Path Bar**.
+
+**Implementation:** `defaults write com.apple.finder ShowPathbar -bool true`
+
+#### Show the Finder status bar — optional
+
+**What it does:** Finder displays the number of items and available disk space.
+
+**Why consider it:** Folder and disk context stays visible while browsing files.
+
+**Manual equivalent:** **Finder → View → Show Status Bar**.
+
+**Implementation:** `defaults write com.apple.finder ShowStatusBar -bool true`
+
+### Screenshot storage
+
+#### Save future Screenshot files in `~/Pictures/Screenshots` — personal choice
+
+**What it does:** Creates `~/Pictures/Screenshots` when needed and changes the save destination used by the built-in Screenshot tools.
+
+**Why consider it:** Captures no longer accumulate on the Desktop.
+
+**Tradeoff:** People who deliberately use the Desktop as a temporary capture queue may prefer the macOS default.
+
+**Manual equivalent:** Press **Shift-Command-5**, choose **Options → Save to → Other Location**, then select a folder.
+
+The equivalent commands are:
 
 ```bash
-./scripts/macos-defaults.sh          # preview
-./scripts/macos-defaults.sh --apply  # record prior values, then apply
+mkdir -p "$HOME/Pictures/Screenshots"
+defaults write com.apple.screencapture location -string "$HOME/Pictures/Screenshots"
 ```
 
-The script does not restore full preference domains automatically because importing an old domain snapshot could overwrite unrelated later settings. It records each prior key under:
+Existing screenshots and screen recordings are not moved.
+
+### What the script actually does
+
+Run the script without arguments to see the same human explanation followed by the exact commands:
+
+```bash
+./scripts/macos-defaults.sh
+```
+
+Nothing is changed in preview mode. Applying performs these actions in order:
+
+1. records the previous raw value or absence of each of the four keys;
+2. creates `~/Pictures/Screenshots` when it does not exist;
+3. writes the three Finder choices;
+4. writes the Screenshot save location;
+5. restarts Finder;
+6. restarts SystemUIServer.
+
+The last two commands do not delete files. They terminate those user-interface processes so macOS relaunches them with the new values. Finder windows or parts of the menu bar may briefly disappear.
+
+Apply all four only after reviewing them:
+
+```bash
+./scripts/macos-defaults.sh --apply
+```
+
+Previous raw values are stored under:
 
 ```text
 ~/.local/state/modern-mac-setup/defaults/TIMESTAMP/
 ```
 
-Use those records to restore the old value with a matching typed `defaults write`, or delete a key that was previously absent. Log out or restart affected applications when a value does not refresh immediately.
+Those files are a diagnostic record, not an automatic restore bundle. Until a reviewed restore command exists, use the manual paths above to change a setting back. Avoid importing a complete old preference domain because that can overwrite unrelated settings changed later.
 
-## Preferences that remain manual
+### Other quality-of-life choices to review manually
 
-Keep these manual because they depend on hardware, accessibility, or personal workflow:
+These are common things to consider, not universal recommendations:
 
-- trackpad and mouse behavior;
-- keyboard repeat and remapping;
-- display scaling, color, HDR, and Night Shift;
-- notification permissions;
-- Focus modes;
-- Dock layout and auto-hide;
-- hot corners and Mission Control;
-- sound input and output;
-- dictation and Siri;
-- iCloud synchronization categories;
-- browser extensions;
-- Accessibility and Full Disk Access grants.
+- **Finder sidebar and new-window location:** keep frequently used folders visible and decide whether new Finder windows open to Recents, the home folder, or another location.
+- **Finder search scope and folder ordering:** decide whether searches start in the current folder and whether folders appear first when sorting by name.
+- **Screenshot workflow:** hold **Control** with a screenshot shortcut to copy the capture to the Clipboard instead of creating a file.
+- **Keyboard and trackpad:** review key repeat, modifier keys, tap-to-click, scrolling direction, gestures, and accessibility needs on the actual hardware.
+- **Dock and window management:** choose Dock position, size, auto-hide, recent-app behavior, tiling, and Mission Control based on screen size and workflow.
+- **Login items and background activity:** review **System Settings → General → Login Items & Extensions** after installing applications.
+- **Default applications:** choose the default browser and review file associations rather than allowing each installer to decide.
+- **Notifications and Focus:** allow interruptions intentionally, especially from newly installed communication and developer tools.
+- **Displays:** review scaling, color profile, HDR, Night Shift, and arrangement on each display.
+- **Cloud synchronization:** decide which Desktop, Documents, Photos, password, and application data should sync before assuming it is a backup.
+
+Keep these manual because they depend on hardware, accessibility, account ownership, privacy, or personal workflow. Accessibility, Full Disk Access, Screen Recording, Input Monitoring, and other privacy grants must always remain user decisions.
 
 Continue with [Maintenance](06-maintenance.md).

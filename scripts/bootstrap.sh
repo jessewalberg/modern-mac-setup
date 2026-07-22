@@ -9,7 +9,6 @@ INSTALL_HOMEBREW=0
 WITH_CLI=0
 APPS_FILE=""
 CONFIGURE_SHELL=0
-APPLY_DEFAULTS=0
 UPDATE_HOMEBREW=1
 DRY_RUN=0
 HOMEBREW_INSTALLER=""
@@ -24,12 +23,12 @@ Options:
   --with-cli           Install the optional Brewfile.cli bundle.
   --apps FILE          Install an explicitly reviewed apps Brewfile.
   --configure-shell    Append the managed Homebrew/mise block to ~/.zshrc.
-  --apply-defaults     Apply the narrow settings in macos-defaults.sh.
   --no-update          Skip the explicit `brew update` step.
   --dry-run            Print planned commands without changing the machine.
   -h, --help           Show this help.
 
 The script installs only Brewfile unless optional flags are supplied.
+macOS interface preferences are reviewed separately with macos-defaults.sh.
 EOF
 }
 
@@ -82,9 +81,6 @@ while [[ "$#" -gt 0 ]]; do
       ;;
     --configure-shell)
       CONFIGURE_SHELL=1
-      ;;
-    --apply-defaults)
-      APPLY_DEFAULTS=1
       ;;
     --no-update)
       UPDATE_HOMEBREW=0
@@ -260,14 +256,6 @@ if [[ "$CONFIGURE_SHELL" -eq 1 ]]; then
   fi
 fi
 
-if [[ "$APPLY_DEFAULTS" -eq 1 ]]; then
-  if [[ "$DRY_RUN" -eq 1 ]]; then
-    run "$ROOT_DIR/scripts/macos-defaults.sh"
-  else
-    run "$ROOT_DIR/scripts/macos-defaults.sh" --apply
-  fi
-fi
-
 cat <<'EOF'
 
 Bootstrap complete.
@@ -277,5 +265,6 @@ Next deliberate steps:
   2. Set Git name and an appropriate public or private commit email.
   3. Run `gh auth login` and choose HTTPS or SSH deliberately.
   4. Pin language versions inside each project rather than globally here.
-  5. Run `./scripts/audit.sh --deep` and review every warning.
+  5. Review optional macOS preferences separately with `./scripts/macos-defaults.sh`.
+  6. Run `./scripts/audit.sh --deep` and review every warning.
 EOF

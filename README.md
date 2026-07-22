@@ -5,7 +5,7 @@
 A practical, security-conscious path from a new Mac to a small developer setup.
 
 **Supports:** macOS 14 or newer; Apple silicon first, with native Intel support while Homebrew supports it.  
-**Last human review:** July 21, 2026
+**Last human review:** July 22, 2026
 
 This guide keeps the default install small. Applications, shell changes, and macOS preferences are opt-in.
 
@@ -92,21 +92,36 @@ Use `mise` for Node, Go, Java, Ruby, Terraform, and similar tools. Use `uv` for 
 
 See [project runtimes](docs/04-runtimes.md) for examples.
 
-## 6. Optionally apply four macOS preferences
+## 6. Optionally review four visible macOS preferences
 
-Preview the commands:
+These choices are separate from the developer bootstrap. Choose them manually in macOS, preview the repository script, or skip them.
+
+### Finder visibility
+
+- **Show all filename extensions — recommended for development.** Makes names such as `README.md`, `config.json`, and `script.sh` unambiguous. Manual path: **Finder → Settings → Advanced → Show all filename extensions**.
+- **Show the path bar — recommended.** Displays the current folder hierarchy at the bottom of Finder windows. Manual path: **Finder → View → Show Path Bar**.
+- **Show the status bar — optional.** Displays the item count and available disk space. Manual path: **Finder → View → Show Status Bar**.
+
+### Screenshot storage
+
+- **Save future captures in `~/Pictures/Screenshots` — personal choice.** The script creates that folder when needed and changes where future files from the built-in Screenshot tools are saved. It does not move existing screenshots or recordings. Manual path: **Shift-Command-5 → Options → Save to → Other Location**.
+
+Read the human-readable plan and exact commands without changing the Mac:
 
 ```bash
+less scripts/macos-defaults.sh
 ./scripts/macos-defaults.sh
 ```
 
-Apply them:
+Apply all four only after reviewing them:
 
 ```bash
 ./scripts/macos-defaults.sh --apply
 ```
 
-This shows filename extensions, Finder's path and status bars, and saves screenshots in `~/Pictures/Screenshots`. Previous values are recorded before changes are made.
+Applying records the previous raw values for reference, then briefly restarts Finder and SystemUIServer so the changes appear. Finder windows or parts of the menu bar may disappear and relaunch. The script does not yet provide one-command restore; use the manual paths above to change a choice back.
+
+See [macOS preference details and other manual quality-of-life checks](docs/05-apps-and-preferences.md#review-macos-preferences-in-plain-language).
 
 ## Check the result
 

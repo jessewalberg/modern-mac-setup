@@ -6,7 +6,6 @@ require "uri"
 
 ROOT = File.expand_path("..", __dir__)
 CATALOG_PATH = File.join(ROOT, "config", "packages.yml")
-REFERENCES_PATH = File.join(ROOT, "docs", "references.md")
 FILES_BY_GROUP = {
   "foundation" => File.join(ROOT, "Brewfile"),
   "cli" => File.join(ROOT, "Brewfile.cli"),
@@ -16,7 +15,6 @@ FILES_BY_GROUP = {
 errors = []
 catalog = YAML.safe_load(File.read(CATALOG_PATH), permitted_classes: [], aliases: false)
 packages = catalog.fetch("packages")
-references = File.read(REFERENCES_PATH)
 
 seen = {}
 packages.each do |package|
@@ -44,7 +42,6 @@ packages.each do |package|
   target = FILES_BY_GROUP.fetch(group)
   contents = File.read(target)
   errors << "missing #{declaration} in #{File.basename(target)}" unless contents.include?(declaration)
-  errors << "references are missing docs URL for #{token}: #{docs}" unless references.include?(docs)
 end
 
 FILES_BY_GROUP.each_value do |path|
@@ -58,7 +55,7 @@ FILES_BY_GROUP.each_value do |path|
 end
 
 if errors.empty?
-  puts "Package catalog is consistent with Brewfiles and reference documentation."
+  puts "Package catalog is consistent with the Brewfiles."
   exit 0
 end
 

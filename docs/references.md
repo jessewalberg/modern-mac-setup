@@ -55,7 +55,7 @@ These sources informed the repository's current behavior. They are intentionally
 - [jq manual](https://jqlang.org/manual/)
 - [ripgrep (`rg`)](https://github.com/BurntSushi/ripgrep#readme)
 - [ShellCheck](https://www.shellcheck.net/)
-- [shfmt](https://github.com/mvdan/sh)
+- [shfmt](https://github.com/mvdan/sh#shfmt)
 - [`tree` Homebrew formula](https://formulae.brew.sh/formula/tree)
 
 ## Optional applications
